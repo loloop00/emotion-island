@@ -1,0 +1,584 @@
+[
+  {
+    "id": "emotion-001",
+    "text": "今天烦躁不安，坐立难安",
+    "expected": { "emotion": "焦虑", "mood": "mood-anxious" }
+  },
+  {
+    "id": "emotion-002",
+    "text": "心里一直发慌",
+    "expected": { "emotion": "焦虑" }
+  },
+  {
+    "id": "emotion-003",
+    "text": "今天有点害怕",
+    "expected": { "emotion": "焦虑" }
+  },
+  {
+    "id": "emotion-004",
+    "text": "压力很大，喘不过气",
+    "expected": { "emotion": "焦虑", "weatherLevel": "weather-heavy" }
+  },
+  {
+    "id": "emotion-005",
+    "text": "昨晚失眠了，很担心明天",
+    "expected": { "emotion": "焦虑" }
+  },
+  {
+    "id": "emotion-006",
+    "text": "今天真的崩溃了",
+    "expected": { "emotion": "焦虑" }
+  },
+  {
+    "id": "emotion-007",
+    "text": "一直在内耗，心很慌",
+    "expected": { "emotion": "焦虑" }
+  },
+  {
+    "id": "emotion-008",
+    "text": "虽然紧张，但很期待",
+    "expected": { "emotion": "开心" }
+  },
+  {
+    "id": "emotion-009",
+    "text": "今天真的很生气",
+    "expected": { "emotion": "愤怒" }
+  },
+  {
+    "id": "emotion-010",
+    "text": "我今天被工作气到了，一肚火",
+    "expected": { "emotion": "愤怒", "work": true, "weatherLevel": "weather-heavy" }
+  },
+  {
+    "id": "emotion-011",
+    "text": "这件事让我特别窝火",
+    "expected": { "emotion": "愤怒" }
+  },
+  {
+    "id": "emotion-012",
+    "text": "今天被人骂了，很委屈",
+    "expected": { "emotion": "悲伤", "conflict": true }
+  },
+  {
+    "id": "emotion-013",
+    "text": "今天和人吵架了",
+    "expected": { "emotion": "愤怒", "conflict": true }
+  },
+  {
+    "id": "emotion-014",
+    "text": "真的要气死了",
+    "expected": { "emotion": "愤怒", "weatherLevel": "weather-heavy" }
+  },
+  {
+    "id": "emotion-015",
+    "text": "今天心里很难过",
+    "expected": { "emotion": "悲伤" }
+  },
+  {
+    "id": "emotion-016",
+    "text": "回家以后哭了",
+    "expected": { "emotion": "悲伤" }
+  },
+  {
+    "id": "emotion-017",
+    "text": "突然觉得很心酸",
+    "expected": { "emotion": "悲伤" }
+  },
+  {
+    "id": "emotion-018",
+    "text": "看到那句话瞬间破防",
+    "expected": { "emotion": "悲伤" }
+  },
+  {
+    "id": "emotion-019",
+    "text": "晚上突然很想家",
+    "expected": { "emotion": "悲伤" }
+  },
+  {
+    "id": "emotion-020",
+    "text": "有点孤独，但很享受独处",
+    "expected": { "emotion": "开心" }
+  },
+  {
+    "id": "emotion-021",
+    "text": "今天头痛了一整天",
+    "expected": { "emotion": "身体不适", "health": true }
+  },
+  {
+    "id": "emotion-022",
+    "text": "胃痛得不想动",
+    "expected": { "emotion": "身体不适", "health": true }
+  },
+  {
+    "id": "emotion-023",
+    "text": "今天感冒了",
+    "expected": { "emotion": "身体不适", "health": true }
+  },
+  {
+    "id": "emotion-024",
+    "text": "身体有点不舒服",
+    "expected": { "emotion": "身体不适", "health": true }
+  },
+  {
+    "id": "emotion-025",
+    "text": "今天真的好累",
+    "expected": { "emotion": "疲惫" }
+  },
+  {
+    "id": "emotion-026",
+    "text": "一整天都很困",
+    "expected": { "emotion": "疲惫" }
+  },
+  {
+    "id": "emotion-027",
+    "text": "昨晚没睡好",
+    "expected": { "emotion": "疲惫" }
+  },
+  {
+    "id": "emotion-028",
+    "text": "忙得精疲力尽",
+    "expected": { "emotion": "疲惫" }
+  },
+  {
+    "id": "emotion-029",
+    "text": "今天特别无聊",
+    "expected": { "emotion": "无聊", "boredom": true }
+  },
+  {
+    "id": "emotion-030",
+    "text": "整个人有点麻木",
+    "expected": { "emotion": "无聊", "boredom": true }
+  },
+  {
+    "id": "emotion-031",
+    "text": "今天做什么都没劲",
+    "expected": { "emotion": "无聊", "boredom": true }
+  },
+  {
+    "id": "emotion-032",
+    "text": "今天很开心",
+    "expected": { "emotion": "开心" }
+  },
+  {
+    "id": "emotion-033",
+    "text": "想到周末就很兴奋",
+    "expected": { "emotion": "开心" }
+  },
+  {
+    "id": "emotion-034",
+    "text": "收到礼物特别感动",
+    "expected": { "emotion": "开心" }
+  },
+  {
+    "id": "emotion-035",
+    "text": "今天被夸了，很有成就感",
+    "expected": { "emotion": "开心" }
+  },
+  {
+    "id": "emotion-036",
+    "text": "事情终于结束了，整个人很释然",
+    "expected": { "emotion": "开心" }
+  },
+  {
+    "id": "emotion-037",
+    "text": "开心得大喊了一声",
+    "expected": { "emotion": "开心", "conflict": false }
+  },
+  {
+    "id": "emotion-038",
+    "text": "本来很紧张，但是后来特别兴奋",
+    "expected": { "emotion": "开心" }
+  },
+  {
+    "id": "emotion-039",
+    "text": "今天很累，但和家人在一起很幸福",
+    "expected": { "emotion": "开心", "family": true }
+  },
+  {
+    "id": "emotion-040",
+    "text": "今天平平淡淡，没发生什么",
+    "expected": { "emotion": "平静" }
+  },
+  {
+    "id": "context-041",
+    "text": "今天没有生气",
+    "expected": { "emotion": "平静", "conflict": false }
+  },
+  {
+    "id": "context-042",
+    "text": "我已经不焦虑了",
+    "expected": { "emotion": "平静", "recovery": true }
+  },
+  {
+    "id": "context-043",
+    "text": "现在没那么难过了",
+    "expected": { "emotion": "平静", "recovery": true }
+  },
+  {
+    "id": "context-044",
+    "text": "休息以后没那么累了",
+    "expected": { "emotion": "平静", "recovery": true }
+  },
+  {
+    "id": "context-045",
+    "text": "今天没跑步",
+    "expected": { "exercise": false }
+  },
+  {
+    "id": "context-046",
+    "text": "今天没喝奶茶",
+    "expected": { "drink": false, "food": false }
+  },
+  {
+    "id": "context-047",
+    "text": "晚上不想吃火锅",
+    "expected": { "food": false }
+  },
+  {
+    "id": "context-048",
+    "text": "今天差点和人吵架",
+    "expected": { "emotion": "平静", "conflict": false }
+  },
+  {
+    "id": "context-049",
+    "text": "明天想去旅行",
+    "expected": { "travel": false }
+  },
+  {
+    "id": "context-050",
+    "text": "最近准备搬家",
+    "expected": { "homeMilestone": false }
+  },
+  {
+    "id": "context-051",
+    "text": "朋友今天搬新家了",
+    "expected": { "homeMilestone": false, "social": false }
+  },
+  {
+    "id": "context-052",
+    "text": "今天帮朋友搬家",
+    "expected": { "homeMilestone": false }
+  },
+  {
+    "id": "context-053",
+    "text": "周末去看了新房",
+    "expected": { "homeMilestone": false }
+  },
+  {
+    "id": "context-054",
+    "text": "正在做暑假的旅行计划",
+    "expected": { "travel": false }
+  },
+  {
+    "id": "context-055",
+    "text": "订了机票，准备去苏州玩",
+    "expected": { "travel": false }
+  },
+  {
+    "id": "event-056",
+    "text": "我今天搬进新家了，虽然很累但很开心",
+    "expected": { "homeMilestone": true, "travel": false, "emotion": "开心" }
+  },
+  {
+    "id": "event-057",
+    "text": "今天去苏州玩了，很开心",
+    "expected": { "travel": true, "travelPlace": "苏州", "emotion": "开心" }
+  },
+  {
+    "id": "event-058",
+    "text": "周末去海边旅行，吹了海风很放松",
+    "expected": { "travel": true, "travelType": "seaside", "emotion": "开心" }
+  },
+  {
+    "id": "event-059",
+    "text": "下午去附近公园玩了一会",
+    "expected": { "travel": false }
+  },
+  {
+    "id": "event-060",
+    "text": "今天一个人喝了杯咖啡",
+    "expected": { "drink": true, "social": false, "food": false }
+  },
+  {
+    "id": "event-061",
+    "text": "和朋友一起喝咖啡聊天",
+    "expected": { "drink": true, "social": true, "food": false }
+  },
+  {
+    "id": "event-062",
+    "text": "今天喝了一杯奶茶",
+    "expected": { "drink": true, "food": false }
+  },
+  {
+    "id": "event-063",
+    "text": "晚上自己做饭吃",
+    "expected": { "food": true }
+  },
+  {
+    "id": "event-064",
+    "text": "跟家人一起吃晚饭，很幸福",
+    "expected": { "family": true, "food": false, "emotion": "开心" }
+  },
+  {
+    "id": "event-065",
+    "text": "今天和朋友一起聚餐",
+    "expected": { "social": true, "food": false }
+  },
+  {
+    "id": "event-066",
+    "text": "参加了朋友的聚会",
+    "expected": { "social": true }
+  },
+  {
+    "id": "event-067",
+    "text": "今天参加公司团建",
+    "expected": { "social": true, "work": false }
+  },
+  {
+    "id": "event-068",
+    "text": "晚上和AI聊天",
+    "expected": { "social": false }
+  },
+  {
+    "id": "event-069",
+    "text": "今天跟客服聊天解决问题",
+    "expected": { "social": false }
+  },
+  {
+    "id": "event-070",
+    "text": "今天工作特别忙",
+    "expected": { "work": true }
+  },
+  {
+    "id": "event-071",
+    "text": "下午连续开了三个会",
+    "expected": { "work": true }
+  },
+  {
+    "id": "event-072",
+    "text": "最近在找工作",
+    "expected": { "careerSearch": true, "work": false }
+  },
+  {
+    "id": "event-073",
+    "text": "今天去参加面试",
+    "expected": { "careerSearch": true, "work": false }
+  },
+  {
+    "id": "event-074",
+    "text": "今天正式入职新公司",
+    "expected": { "careerChange": true, "work": false }
+  },
+  {
+    "id": "event-075",
+    "text": "今天终于辞职了",
+    "expected": { "careerChange": true, "work": false }
+  },
+  {
+    "id": "event-076",
+    "text": "今天突然被裁员",
+    "expected": { "careerChange": true, "work": false }
+  },
+  {
+    "id": "event-077",
+    "text": "今天升职了，很兴奋",
+    "expected": { "careerChange": true, "work": false, "emotion": "开心" }
+  },
+  {
+    "id": "event-078",
+    "text": "晚上读了一会书",
+    "expected": { "learning": true }
+  },
+  {
+    "id": "event-079",
+    "text": "今天看书看了两小时",
+    "expected": { "learning": true }
+  },
+  {
+    "id": "event-080",
+    "text": "下午去上课了",
+    "expected": { "learning": true }
+  },
+  {
+    "id": "event-081",
+    "text": "晚上写完了作业",
+    "expected": { "learning": true }
+  },
+  {
+    "id": "event-082",
+    "text": "今天跑步五公里",
+    "expected": { "exercise": true }
+  },
+  {
+    "id": "event-083",
+    "text": "晚上打了羽毛球",
+    "expected": { "exercise": true }
+  },
+  {
+    "id": "event-084",
+    "text": "出去走一走，吹了吹风",
+    "expected": { "exercise": true, "windy": true }
+  },
+  {
+    "id": "event-085",
+    "text": "今天太忙了，没走路",
+    "expected": { "exercise": false }
+  },
+  {
+    "id": "event-086",
+    "text": "晚上一个人看电影",
+    "expected": { "leisure": true }
+  },
+  {
+    "id": "event-087",
+    "text": "下班以后去逛街",
+    "expected": { "leisure": true }
+  },
+  {
+    "id": "event-088",
+    "text": "晚上打了一会游戏",
+    "expected": { "leisure": true }
+  },
+  {
+    "id": "event-089",
+    "text": "今天点了外卖",
+    "expected": { "food": true }
+  },
+  {
+    "id": "event-090",
+    "text": "晚上煮饭吃",
+    "expected": { "food": true }
+  },
+  {
+    "id": "compound-091",
+    "text": "喝着咖啡看书，感觉很舒服",
+    "expected": { "drink": true, "learning": true, "social": false, "emotion": "开心" }
+  },
+  {
+    "id": "compound-092",
+    "text": "今天跟家人吵了一架",
+    "expected": { "conflict": true, "family": false, "emotion": "愤怒" }
+  },
+  {
+    "id": "compound-093",
+    "text": "今天和朋友吵架了",
+    "expected": { "conflict": true, "social": false, "emotion": "愤怒" }
+  },
+  {
+    "id": "compound-094",
+    "text": "跟朋友一起去苏州旅游",
+    "expected": { "travel": true, "social": false, "travelPlace": "苏州" }
+  },
+  {
+    "id": "compound-095",
+    "text": "搬新家后跟家人一起吃饭",
+    "expected": { "homeMilestone": true, "family": false, "food": false }
+  },
+  {
+    "id": "compound-096",
+    "text": "今天被工作气到了，一肚子火",
+    "expected": { "emotion": "愤怒", "work": true, "weatherLevel": "weather-heavy" }
+  },
+  {
+    "id": "compound-097",
+    "text": "今天工作了一整天，真的好累",
+    "expected": { "emotion": "疲惫", "work": true }
+  },
+  {
+    "id": "compound-098",
+    "text": "跑步很累，但结束后很舒服",
+    "expected": { "emotion": "开心", "exercise": true }
+  },
+  {
+    "id": "compound-099",
+    "text": "今天下雨了，心情很平静",
+    "expected": { "emotion": "平静" }
+  },
+  {
+    "id": "compound-100",
+    "text": "今天很焦虑，出去走走后好多了",
+    "expected": { "emotion": "焦虑", "exercise": true, "recovery": true, "weatherLevel": "weather-light" }
+  },
+  {
+    "id": "emotion-101",
+    "text": "今天很失落",
+    "expected": { "emotion": "悲伤", "mood": "mood-sad" }
+  },
+  {
+    "id": "event-102",
+    "text": "今天有点失落，女朋友不理我",
+    "expected": {
+      "emotion": "悲伤",
+      "social": false,
+      "relationshipNeglect": true,
+      "label": "海面有点远",
+      "line": "今天海面有点远，灯塔还在等一声回应。",
+      "weatherLevel": "weather-light"
+    }
+  },
+  {
+    "id": "weather-103",
+    "text": "今天打台风，狂风暴雨",
+    "expected": {
+      "stormWeather": true,
+      "weatherLevel": "weather-heavy",
+      "label": "风雨经过海面",
+      "line": "狂风暴雨经过海面，灯塔替小岛守着光。"
+    }
+  },
+  {
+    "id": "weather-104",
+    "text": "今天差点被单车撞到",
+    "expected": {
+      "emotion": "焦虑",
+      "fear": true,
+      "label": "害怕",
+      "line": "刚才那一下太近了，灯塔替你留着一盏灯。",
+      "emotionAmbiguous": false
+    }
+  },
+  {
+    "id": "weather-105",
+    "text": "天天都是大太阳好晒",
+    "expected": {
+      "emotion": "烦躁",
+      "heatWeather": true,
+      "weatherLevel": "weather-light",
+      "label": "阳光有点强",
+      "line": "今天的阳光有点强，小岛替你挡一会儿。",
+      "emotionAmbiguous": false
+    }
+  },
+  {
+    "id": "weather-106",
+    "text": "今天狂风暴雨，不敢出去",
+    "expected": {
+      "emotion": "焦虑",
+      "stormWeather": true,
+      "heatWeather": false,
+      "weatherLevel": "weather-heavy",
+      "line": "狂风暴雨经过海面，灯塔替小岛守着光。",
+      "emotionAmbiguous": false
+    }
+  },
+  {
+    "id": "emotion-107",
+    "text": "今天有点失望",
+    "expected": { "emotion": "悲伤" }
+  },
+  {
+    "id": "emotion-108",
+    "text": "今天有点暴躁",
+    "expected": { "emotion": "烦躁" }
+  },
+  {
+    "id": "emotion-109",
+    "text": "今天筋疲力尽",
+    "expected": { "emotion": "疲惫" }
+  },
+  {
+    "id": "emotion-110",
+    "text": "今天好无趣",
+    "expected": { "emotion": "无聊", "boredom": true }
+  }
+]
