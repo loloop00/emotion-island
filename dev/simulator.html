@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>今天的小岛 · 30 天状态测试</title>
+    <link rel="stylesheet" href="https://unpkg.com/lxgw-wenkai-screen-webfont@1.7.0/lxgwwenkaigbscreen.css" />
+    <link rel="stylesheet" href="./simulator.css?v=monthly-41" />
+  </head>
+  <body>
+    <header class="sim-header">
+      <div>
+        <p class="sim-kicker" id="sim-scenario-kicker">仅用于展示 · 固定 30 天样例</p>
+        <h1 id="sim-scenario-title">30 天小岛生长测试</h1>
+        <p class="sim-scenario-copy" id="sim-scenario-copy"></p>
+      </div>
+      <div class="sim-header-actions">
+        <a href="../index.html">返回主页</a>
+      </div>
+    </header>
+
+    <main class="sim-layout">
+      <section class="sim-preview" aria-label="小岛画面预览">
+        <iframe id="island-frame" src="../index.html?embed=simulator&v=monthly-41" title="小岛第二视角模拟画面"></iframe>
+      </section>
+
+      <section class="sim-controls" aria-label="模拟控制">
+        <div class="day-control">
+          <div>
+            <span>小岛走到这里</span>
+            <strong id="day-output">第 1 天</strong>
+          </div>
+          <button id="play-days" type="button" aria-label="播放 30 天变化" title="播放 30 天变化">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m8 5 11 7-11 7Z" />
+            </svg>
+          </button>
+        </div>
+
+        <input id="day-range" type="range" min="1" max="30" value="30" aria-label="选择模拟天数" />
+
+        <div class="daily-note">
+          <span id="date-output"></span>
+          <p id="text-output"></p>
+          <strong id="trace-output"></strong>
+        </div>
+
+      </section>
+
+      <section class="sim-month-summary" aria-labelledby="sim-month-summary-title">
+        <div class="sim-month-summary-heading">
+          <h2 id="sim-month-summary-title">这个月，岛上留下了什么</h2>
+        </div>
+        <p class="sim-month-summary-overview" id="sim-month-summary-overview"></p>
+        <div class="life-palette sim-life-palette" id="sim-life-palette" role="group" aria-label="这个月的生活色谱">
+          <div class="life-palette-canvas-wrap">
+            <canvas class="life-palette-canvas" aria-hidden="true"></canvas>
+            <div class="life-palette-labels"></div>
+          </div>
+          <div class="life-palette-detail" id="sim-life-palette-detail" aria-live="polite">
+            <span>点击一个色块，看看它留下了什么。</span>
+          </div>
+        </div>
+        <p class="sim-month-summary-empty" id="sim-month-summary-empty"></p>
+      </section>
+    </main>
+
+    <script src="../analyzer.js?v=19"></script>
+    <script src="../island-state.js?v=7"></script>
+    <script src="../life-palette.js?v=22"></script>
+    <script src="../sound-engine.js?v=3"></script>
+    <script src="./simulator.js?v=monthly-41"></script>
+  </body>
+</html>

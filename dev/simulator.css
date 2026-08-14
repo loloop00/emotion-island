@@ -1,0 +1,384 @@
+:root {
+  --ink: #173328;
+  --muted: #66736e;
+  --line: rgba(23, 51, 40, 0.16);
+  --paper: #fffdfa;
+  --green: #2c7e39;
+  --sea: #1478c8;
+  --coral: #ef6c3f;
+  font-family: "LXGW WenKai Screen", "Kaiti SC", "STKaiti", sans-serif;
+  color: var(--ink);
+  background: #eef0eb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  color: inherit;
+}
+
+.sim-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 26px clamp(20px, 4vw, 56px) 20px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.sim-kicker {
+  margin: 0 0 4px;
+  color: var(--coral);
+  font-size: 13px;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(25px, 3vw, 34px);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.sim-header a {
+  font-size: 14px;
+  text-underline-offset: 4px;
+}
+
+.sim-header-actions {
+  display: grid;
+  justify-items: end;
+  gap: 10px;
+}
+
+.scenario-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: 6px;
+}
+
+.scenario-links a {
+  padding: 6px 9px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.scenario-links a:hover,
+.scenario-links a.is-selected {
+  color: var(--ink);
+  background: rgba(20, 120, 200, 0.08);
+  border-color: rgba(20, 120, 200, 0.34);
+}
+
+.sim-scenario-copy {
+  max-width: 660px;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.sim-layout {
+  width: min(720px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 32px 0 48px;
+}
+
+.sim-controls {
+  margin-top: 24px;
+  padding: 0 4px;
+}
+
+.day-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.day-control span,
+.daily-note span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.day-control strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 25px;
+}
+
+#play-days {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  color: white;
+  background: var(--green);
+  border: 0;
+  border-radius: 50%;
+}
+
+#play-days svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+#play-days.is-playing svg {
+  display: none;
+}
+
+#play-days.is-playing::after {
+  content: "";
+  width: 10px;
+  height: 14px;
+  border-right: 4px solid currentColor;
+  border-left: 4px solid currentColor;
+}
+
+#day-range {
+  width: 100%;
+  margin: 24px 0 17px;
+  accent-color: var(--sea);
+}
+
+.daily-note {
+  min-height: 138px;
+  margin-top: 26px;
+  padding: 17px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.daily-note p {
+  margin-top: 9px;
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.daily-note strong {
+  display: block;
+  margin-top: 9px;
+  color: var(--coral);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.sim-preview {
+  overflow: hidden;
+  min-height: 0;
+  background: var(--sea);
+  border-radius: 8px;
+  box-shadow: 0 22px 55px rgba(0, 61, 110, 0.18);
+}
+
+.sim-preview iframe {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+}
+
+.sim-month-summary {
+  margin-top: 34px;
+  padding: 28px 4px 12px;
+  border-top: 1px solid var(--line);
+}
+
+.sim-month-summary-heading p {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.sim-month-summary-heading h2 {
+  margin-top: 5px;
+  font-size: 28px;
+  line-height: 1.3;
+}
+
+.sim-month-summary-overview {
+  margin-top: 16px;
+  color: var(--green);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.life-palette {
+  margin-top: 15px;
+}
+
+.life-palette-canvas-wrap {
+  position: relative;
+  height: var(--life-palette-height, clamp(280px, 50vw, 350px));
+  overflow: hidden;
+}
+
+.life-palette-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.life-palette-labels {
+  position: absolute;
+  inset: 0;
+}
+
+.life-palette-label {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  padding: 6px 4px;
+  color: var(--life-label-color, #111814);
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.2;
+  text-shadow: 0 1px 0 rgba(255, 250, 235, 0.18);
+  cursor: pointer;
+  transform-origin: center;
+  transform: translate(-50%, -50%);
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.life-palette-label:hover,
+.life-palette-label.is-selected {
+  filter: brightness(1.08);
+  transform: translate(-50%, -50%) scale(1.07) rotate(-2deg);
+}
+
+.life-palette-label:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.life-palette-detail {
+  min-height: 54px;
+  margin-top: 5px;
+  padding: 13px 0 4px;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.life-palette-detail.has-selection {
+  color: var(--ink);
+}
+
+.life-palette-detail strong {
+  display: block;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.life-palette-detail p {
+  margin-top: 3px;
+}
+
+.life-palette-detail small {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.sim-month-summary-empty {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(20, 120, 200, 0.32);
+  outline-offset: 3px;
+}
+
+@media (max-width: 780px) {
+  .sim-header {
+    align-items: start;
+  }
+
+  .sim-header-actions {
+    justify-items: end;
+  }
+
+  .scenario-links {
+    justify-content: end;
+  }
+
+  .sim-layout {
+    width: min(100% - 28px, 620px);
+    padding-top: 22px;
+  }
+
+  .sim-preview {
+    position: relative;
+    top: auto;
+  }
+
+  .sim-controls {
+    position: relative;
+    top: auto;
+    padding: 0;
+  }
+
+  .life-palette-canvas-wrap {
+    height: var(--life-palette-height, 270px);
+  }
+
+  .life-palette-label {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 560px) {
+  .sim-header {
+    display: grid;
+    gap: 16px;
+  }
+
+  .sim-header-actions,
+  .scenario-links {
+    justify-items: start;
+    justify-content: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+  }
+}
