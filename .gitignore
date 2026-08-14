@@ -1,0 +1,12 @@
+# OS and local editor files
+.DS_Store
+.codex/
+.playwright-cli/
+
+# Local production and content-work artifacts
+output/
+edit/
+scripts/
+UI审计报告-*.md
+情绪小岛视频脚本模板.md
+情绪小岛视频规范.md

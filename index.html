@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>今天的小岛</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3CclipPath id='c'%3E%3Ccircle cx='32' cy='32' r='29'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23c)'%3E%3Crect width='64' height='64' fill='%231478c8'/%3E%3Cpath d='M40-3C33 10 46 20 38 32C31 43 43 52 35 67H67V-3Z' fill='%23f1e1b7'/%3E%3Cpath d='M48-3C41 10 53 21 46 33C40 44 51 54 44 67H67V-3Z' fill='%234c9b42'/%3E%3Cpath d='M9 20c8-3 15-3 22 0M7 43c8 3 15 3 22 0' fill='none' stroke='%23fff9e8' stroke-width='3' stroke-linecap='round'/%3E%3Crect x='49' y='31' width='6' height='11' rx='1' fill='%23ef6c3f'/%3E%3C/g%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="https://unpkg.com/@chinese-fonts/yozai@3.0.0/dist/Yozai-Medium/result.css" />
+    <link rel="stylesheet" href="https://unpkg.com/lxgw-wenkai-screen-webfont@1.7.0/lxgwwenkaigbscreen.css" />
+    <link rel="stylesheet" href="./styles.css?v=monthly-41" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="今天的小岛首页">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 48 48" role="img">
+              <defs>
+                <clipPath id="brand-coast-clip">
+                  <circle cx="24" cy="24" r="22" />
+                </clipPath>
+              </defs>
+              <g clip-path="url(#brand-coast-clip)">
+                <rect width="48" height="48" fill="#1478c8" />
+                <path d="M30-2c-5 10 5 17-1 26-5 8 4 15-2 26h23V-2Z" fill="#f1e1b7" />
+                <path d="M36-2c-5 10 5 18 0 27-5 8 4 16-2 25h16V-2Z" fill="#4c9b42" />
+                <path d="M7 15c6-2 11-2 16 0M5 33c6 2 11 2 17 0" fill="none" stroke="#fff9e8" stroke-width="2.3" stroke-linecap="round" />
+                <rect x="37" y="23" width="5" height="9" rx="1" fill="#ef6c3f" />
+              </g>
+            </svg>
+          </span>
+          <span>
+            <strong>今天的小岛</strong>
+            <small>Today's Island</small>
+          </span>
+        </a>
+        <nav class="top-actions" aria-label="主要操作">
+          <button class="ghost-button" id="show-history" type="button" aria-label="打开小岛记录" title="打开小岛记录">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 12a8 8 0 1 0 2.34-5.66" />
+              <path d="M4 4v6h6" />
+              <path d="M12 8v5l3 2" />
+            </svg>
+            <span class="history-button-label history-button-label-full">小岛记录</span>
+            <span class="history-button-label history-button-label-short">记录</span>
+          </button>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero" aria-label="今天的小岛">
+          <div class="entry-panel">
+            <div class="entry-copy">
+              <h1>今天过得怎么样？</h1>
+            </div>
+
+            <div class="voice-box" id="voice-box">
+              <div class="entry-composer">
+                <label class="text-entry" for="daily-input">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z" />
+                  </svg>
+                  <textarea id="daily-input" rows="1" placeholder="写下今天" aria-label="写下今天" aria-describedby="voice-hint"></textarea>
+                </label>
+                <button class="mic-button" id="mic-button" type="button" aria-label="开始语音输入">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <g class="mic-symbol">
+                      <path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z" />
+                      <path d="M5 11a7 7 0 0 0 14 0" />
+                      <path d="M12 18v3" />
+                      <path d="M8 21h8" />
+                    </g>
+                    <rect class="stop-symbol" x="8" y="8" width="8" height="8" rx="1.5" />
+                  </svg>
+                </button>
+              </div>
+              <span class="sr-only" id="voice-status" aria-live="polite">语音输入已准备好</span>
+              <span class="sr-only" id="voice-hint">文字输入默认开启，也可以使用麦克风</span>
+            </div>
+
+            <button class="primary-button" id="submit-day" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2l1.6 5.2L19 9l-5.4 1.8L12 16l-1.6-5.2L5 9l5.4-1.8L12 2Z" />
+                <path d="M19 15l.8 2.4L22 18l-2.2.6L19 21l-.8-2.4L16 18l2.2-.6L19 15Z" />
+              </svg>
+              更新今天的小岛
+            </button>
+
+            <div class="entry-ambient" id="entry-ambient" aria-live="polite">
+              <div class="entry-ambient-copy">
+                <span>此刻的海面</span>
+                <strong id="entry-ambient-copy">海面还在轻轻动着。</strong>
+              </div>
+              <svg class="entry-ambient-sketch" viewBox="0 0 340 126" aria-hidden="true">
+                <path class="entry-ambient-horizon" d="M15 42c48-16 92-14 132 2s82 18 119 4 52-15 59-9" />
+                <path class="entry-ambient-wave entry-ambient-wave-one" d="M14 72c36-11 69-10 99 1s61 12 91 2 61-11 122 5" />
+                <path class="entry-ambient-wave entry-ambient-wave-two" d="M27 94c30-8 58-7 84 2s55 11 85 1 60-10 116 5" />
+                <path class="entry-ambient-boat" d="M125 61c14-5 31-5 47 0-5 10-15 14-28 13-10-1-16-5-19-13Zm23-1V35m0 3c-10 7-14 14-13 22h13Z" />
+              </svg>
+            </div>
+          </div>
+
+          <div class="island-stage" id="island-stage" aria-live="polite">
+            <div class="message-bubble">
+              <p id="island-line">今天的小岛，正在等你带回一点生活。</p>
+            </div>
+
+            <section class="island-feedback" id="island-feedback" aria-label="今天的理解" hidden>
+              <div class="island-feedback-topline">
+                <p id="island-feedback-summary"></p>
+                <div class="island-feedback-actions">
+                  <button class="island-feedback-confirm" id="island-feedback-confirm" type="button">是的</button>
+                  <button class="island-feedback-edit" id="island-feedback-edit" type="button">改一下</button>
+                </div>
+              </div>
+              <div class="island-feedback-options" id="island-feedback-options" hidden></div>
+            </section>
+
+            <aside class="island-event-note" id="island-event-note" aria-live="polite" hidden>
+              <span>刚刚留下</span>
+              <strong id="island-event-note-title"></strong>
+              <p id="island-event-note-detail"></p>
+            </aside>
+
+            <button class="view-switch" id="toggle-view" type="button" aria-pressed="false" aria-label="回到小屋" data-sound="exit">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8 3H3v5" />
+                <path d="M3 3l7 7" />
+                <path d="M16 21h5v-5" />
+                <path d="M21 21l-7-7" />
+              </svg>
+              <span class="view-switch-label">回到小屋</span>
+            </button>
+
+            <div class="sky mood-calm" id="sky">
+              <span class="sun"></span>
+              <svg class="weather-overlay" viewBox="0 0 720 920" preserveAspectRatio="none" aria-hidden="true">
+                <defs>
+                  <filter id="weatherPaint" x="-8%" y="-12%" width="116%" height="124%">
+                    <feTurbulence type="fractalNoise" baseFrequency=".018 .08" numOctaves="3" seed="73" result="weatherNoise" />
+                    <feDisplacementMap in="SourceGraphic" in2="weatherNoise" scale="8" xChannelSelector="R" yChannelSelector="B" result="roughWeather" />
+                    <feColorMatrix in="weatherNoise" type="saturate" values="0" result="weatherMono" />
+                    <feComponentTransfer in="weatherMono" result="weatherGrain">
+                      <feFuncA type="table" tableValues="0 .17" />
+                    </feComponentTransfer>
+                    <feComposite in="weatherGrain" in2="roughWeather" operator="in" result="weatherTexture" />
+                    <feBlend in="roughWeather" in2="weatherTexture" mode="multiply" />
+                  </filter>
+                </defs>
+                <g class="weather-cloud-bank" filter="url(#weatherPaint)">
+                  <path class="weather-cloud-mass" d="M-45 178c34-52 83-70 146-52 32-39 88-29 110 15 52-3 91 27 104 72-91 42-207 43-360 4ZM491 86c34-45 85-57 142-31 39-30 91-10 102 35 41 4 69 28 78 65-103 33-211 20-322-69Z" />
+                  <path class="weather-cloud-layer" d="M-28 205c72-25 160-17 263 24M25 238c61-14 127-9 198 16M526 97c62-8 126 8 193 48M551 133c54 2 105 14 154 37" />
+                </g>
+                <g class="weather-wind-strokes" filter="url(#weatherPaint)">
+                  <path d="M54 316c73-24 146-22 219 7M93 352c47-11 94-9 141 6M428 290c62-20 124-18 187 7M465 330c45-11 90-8 135 8" />
+                </g>
+                <g class="weather-rain-strokes">
+                  <path d="M116 274l-25 73M166 267l-26 78M221 279l-24 70M455 240l-27 78M514 247l-25 74M575 255l-26 76" />
+                </g>
+              </svg>
+            </div>
+
+            <svg class="island-art island-art-close" id="closeup-art" viewBox="0 0 720 920" preserveAspectRatio="xMidYMid slice" role="img" aria-label="小岛一角的近景海面">
+              <defs>
+                <filter id="closePaint" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
+                  <feTurbulence type="fractalNoise" baseFrequency=".018 .085" numOctaves="3" seed="21" result="paintNoise" />
+                  <feDisplacementMap in="SourceGraphic" in2="paintNoise" scale="4.5" xChannelSelector="R" yChannelSelector="B" result="roughShape" />
+                  <feColorMatrix in="paintNoise" type="saturate" values="0" result="monoNoise" />
+                  <feComponentTransfer in="monoNoise" result="softNoise">
+                    <feFuncA type="table" tableValues="0 .16" />
+                  </feComponentTransfer>
+                  <feComposite in="softNoise" in2="roughShape" operator="in" result="paintGrain" />
+                  <feBlend in="roughShape" in2="paintGrain" mode="multiply" />
+                </filter>
+                <filter id="closeDryBrush" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
+                  <feTurbulence type="fractalNoise" baseFrequency=".026 .11" numOctaves="2" seed="37" result="brushNoise" />
+                  <feDisplacementMap in="SourceGraphic" in2="brushNoise" scale="8" xChannelSelector="R" yChannelSelector="G" />
+                </filter>
+                <filter id="closeCanvas" x="0" y="0" width="100%" height="100%">
+                  <feTurbulence type="fractalNoise" baseFrequency=".026 .075" numOctaves="4" seed="33" />
+                  <feColorMatrix type="saturate" values="0" />
+                  <feComponentTransfer>
+                    <feFuncA type="table" tableValues="0 .13" />
+                  </feComponentTransfer>
+                </filter>
+              </defs>
+
+              <rect width="720" height="920" rx="52" fill="#1478c8" />
+              <path class="close-sea-paint close-sea-paint-one" d="M-42 60C102 24 236 48 378 20c66-13 121-10 177 3-42 126-45 245-8 354-96 9-196-4-300 12-100 16-193 3-289-20Z" />
+              <path class="close-sea-paint close-sea-paint-two" d="M-36 426c112-42 213-36 311-9 91 25 174 20 253-16-33 99-47 190-34 275-128-18-234-1-323 20-75 18-145 18-207 2Z" />
+              <path class="close-sea-paint close-sea-paint-three" d="M-28 727c98 26 194 21 286-13 86-31 161-33 226-8-3 71-18 142-46 214H-28Z" />
+              <g class="close-sea-brushes" filter="url(#closeDryBrush)">
+                <path d="M468-8c-6 72 7 143 38 214 31 70 34 126 8 178-23 47-65 82-81 132-15 47-4 95 3 141 15 92 1 181-38 271" />
+                <path d="M425 3c-6 68 6 134 34 200 30 69 32 124 8 173-22 45-61 79-76 127-14 44-4 89 2 133 14 88 1 173-35 258" />
+                <path d="M384 34c-4 58 8 116 34 176 27 63 29 113 7 158-20 41-56 72-69 116-13 41-4 82 2 122 13 79 2 156-30 232" />
+              </g>
+
+              <path class="close-shore-sand" d="M550-28c-11 64-17 126-4 187 9 45 31 82 43 122 15 51 10 103-22 153-27 42-67 74-79 122-10 39 3 78 10 116 14 80-3 164-37 248h259V-28Z" filter="url(#closePaint)" />
+              <path class="close-shore-underpaint" d="M529-18c-8 75 2 143 30 205 32 71 42 127 16 181-21 44-62 78-79 124-17 47-5 93 2 139 14 92-2 186-43 289" filter="url(#closeDryBrush)" />
+              <path class="close-shore-foam" d="M513-17c-7 68 5 135 34 201 30 68 37 123 12 174-23 46-67 81-83 129-15 44-4 89 3 132 15 92-1 188-42 301" filter="url(#closeDryBrush)" />
+              <path class="close-shore-foam close-shore-foam-secondary" d="M492-9c-5 63 8 126 36 189 29 64 34 116 11 163-22 43-61 77-76 122-14 42-4 85 2 127 14 87 0 177-37 267" filter="url(#closeDryBrush)" />
+              <g class="close-foam-breaks" filter="url(#closeDryBrush)">
+                <path d="M481 92c8 45 20 82 36 113" />
+                <path d="M514 242c14 42 15 77 1 107" />
+                <path d="M447 441c-17 33-22 66-14 99" />
+                <path d="M441 620c12 50 9 95-8 136" />
+                <path d="M401 808c-5 26-12 50-22 73" />
+              </g>
+
+              <rect class="close-land-edge-fill" x="665" y="-4" width="59" height="928" />
+              <path class="close-land" d="M594-30c-12 79-9 149 22 213 36 72 48 127 18 178-25 42-69 71-90 115-25 53-8 105-2 157 10 88-10 184-55 287h253V-30Z" filter="url(#closePaint)" />
+              <path class="close-land-paint close-land-paint-one" d="M632-28c-9 95 17 180 48 249 21 47 24 88 8 123-17 37-57 65-74 102-18 38-8 78 2 116 25 94 12 202-26 358h130V-28Z" filter="url(#closeDryBrush)" />
+              <path class="close-land-paint close-land-paint-two" d="M566 386c46-39 93-49 154-37v307c-49 5-97-8-142-39-6-39-17-76-15-114 2-44 13-80 3-117Z" filter="url(#closeDryBrush)" />
+              <g class="close-grass-strokes" filter="url(#closeDryBrush)">
+                <path d="M642 79l30-12M611 225l40-13M631 409l45-10M585 529l34-14M626 727l43-13M575 845l38-11" />
+              </g>
+
+              <g class="asset always feature-lighthouse close-lighthouse" filter="url(#closeDryBrush)" aria-label="远处的灯塔">
+                <path class="lighthouse-beam" d="M640 248 426 207 640 275Z" />
+                <path class="lighthouse-tower" d="M629 265h35l9 128-53-1Z" />
+                <path class="lighthouse-roof" d="M621 266c9-13 27-18 43-3l-3 11h-42Z" />
+                <rect class="lighthouse-lantern" x="628" y="255" width="31" height="14" rx="2" />
+                <path class="lighthouse-window" d="M639 292h13l2 17h-14Z" />
+                <path class="lighthouse-base" d="M614 392c15-7 35-7 57 0l10 11h-78Z" />
+              </g>
+
+              <g class="asset always close-sailboat" filter="url(#closePaint)" aria-label="海面上的小船">
+                <path class="close-boat-shadow" d="M204 730c44-12 90-10 132 5-22 13-54 17-94 13-19-4-31-10-38-18Z" />
+                <path class="close-boat-body" d="M208 700c35-13 78-13 119 0-14 28-46 39-83 33-21-4-32-14-36-33Z" />
+                <path class="close-boat-rim" d="M208 700c35-13 78-13 119 0-14 28-46 39-83 33-21-4-32-14-36-33Z" />
+                <path class="close-boat-mast" d="M263 700v-70" />
+                <path class="close-boat-sail" d="M260 635c-24 15-32 34-28 59l29 4Z" />
+                <path class="close-boat-wake" d="M176 726c23 6 46 7 68 2M322 726c20 5 40 5 60 0" />
+              </g>
+              <path d="M0 0h720v920H0Z" fill="transparent" filter="url(#closeCanvas)" opacity=".9" pointer-events="none" />
+
+              <g class="asset always close-person" filter="url(#closeDryBrush)">
+                <path class="close-person-shadow" d="M590 668c17 9 34 20 52 34" />
+                <path class="close-person-legs" d="M584 661l-2 10M590 661l3 10" />
+                <path class="close-person-body" d="M580 642c6-4 12-3 16 2l-4 18-13-1Z" />
+                <circle class="close-person-head" cx="588" cy="637" r="5" />
+              </g>
+
+              <g class="asset always close-trees">
+                <path class="tree-shadow" d="M610 184c23 6 45 14 67 25" />
+                <g transform="translate(-52 30)">
+                  <path class="tree-shadow" d="M647 326c19 4 38 10 57 20" />
+                </g>
+                <path class="tree-shadow" d="M562 498c22 7 44 16 66 27M638 626c21 5 40 12 60 21" />
+                <path class="painted-tree" d="M610 105l-9 21 3 4-8 17 5 2-6 18 8 2-3 14 10 14 9-13-3-15 7-3-7-18 5-3-7-17 4-3Z" />
+                <g transform="translate(-52 30)">
+                  <path class="painted-tree" d="M645 250l-8 18 4 3-7 14 4 3-5 18 7 1-3 12 8 15 9-14-4-13 6-2-6-17 4-2-7-17 5-3Z" />
+                </g>
+                <path class="painted-tree" d="M559 420l-10 22 4 3-8 18 5 3-8 19 8 2-4 15 13 15 10-16-3-15 7-3-8-20 5-4-7-18 4-3Z" />
+                <path class="painted-tree" d="M635 552l-8 18 3 4-7 14 5 3-7 16 7 3-3 11 10 12 8-13-3-12 6-3-7-16 4-3-6-16 4-3Z" />
+              </g>
+
+              <g class="asset always close-birds">
+                <path d="M228 418c18-11 35-12 51-3" />
+                <path d="M279 415c19-12 37-10 55 2" />
+              </g>
+            </svg>
+
+            <svg class="island-art island-art-full" id="island-art" viewBox="0 0 720 920" preserveAspectRatio="xMidYMid slice" role="img" aria-label="从海岸回到小屋前的近距离视角">
+              <defs>
+                <filter id="fullPaint" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+                  <feTurbulence type="fractalNoise" baseFrequency=".018 .085" numOctaves="3" seed="51" result="paintNoise" />
+                  <feDisplacementMap in="SourceGraphic" in2="paintNoise" scale="4.5" xChannelSelector="R" yChannelSelector="B" result="roughShape" />
+                  <feColorMatrix in="paintNoise" type="saturate" values="0" result="monoNoise" />
+                  <feComponentTransfer in="monoNoise" result="softNoise">
+                    <feFuncA type="table" tableValues="0 .16" />
+                  </feComponentTransfer>
+                  <feComposite in="softNoise" in2="roughShape" operator="in" result="paintGrain" />
+                  <feBlend in="roughShape" in2="paintGrain" mode="multiply" />
+                </filter>
+                <filter id="fullDryBrush" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+                  <feTurbulence type="fractalNoise" baseFrequency=".026 .11" numOctaves="2" seed="57" result="brushNoise" />
+                  <feDisplacementMap in="SourceGraphic" in2="brushNoise" scale="8" xChannelSelector="R" yChannelSelector="G" />
+                </filter>
+                <filter id="fullCanvas" x="0" y="0" width="100%" height="100%">
+                  <feTurbulence type="fractalNoise" baseFrequency=".026 .075" numOctaves="4" seed="63" />
+                  <feColorMatrix type="saturate" values="0" />
+                  <feComponentTransfer>
+                    <feFuncA type="table" tableValues="0 .13" />
+                  </feComponentTransfer>
+                </filter>
+                <g id="busyWorkBoat">
+                  <path class="busy-work-wake" d="M-35 12c22 6 45 5 70-2" />
+                  <path class="busy-work-hull" d="M-27 0c18-7 37-6 57 2-8 14-22 20-43 16-8-4-13-9-14-18Z" />
+                  <path class="busy-work-rim" d="M-27 0c18-7 37-6 57 2" />
+                  <path class="busy-work-mast" d="M1 0v-42" />
+                  <path class="busy-work-sail busy-work-sail-light" d="M-3-39c-15 10-21 22-19 35l19 2Z" />
+                  <path class="busy-work-sail busy-work-sail-warm" d="M5-38c15 9 22 20 21 33L5-2Z" />
+                </g>
+              </defs>
+
+              <rect width="720" height="920" rx="52" fill="#6ea9ca" />
+              <path class="home-sky-paint home-sky-paint-one" d="M-20 20c126-30 243-23 350 7 98 28 204 24 318-12 43-14 76-12 92 7v284H-20Z" />
+              <path class="home-sky-paint home-sky-paint-two" d="M-15 173c104-31 198-28 282 8 91 39 184 43 281 12 67-21 125-21 172 2v171H-15Z" />
+              <g class="home-sky-brushes" filter="url(#fullDryBrush)">
+                <path d="M72 126c81-24 156-20 225 10M354 87c93-18 181-8 264 31M101 244c76-22 149-17 220 15" />
+              </g>
+
+              <path class="home-mountain-back" d="M-30 431c67-90 148-137 244-141 82-3 148 28 198 94 63-91 143-131 240-119 68 8 119 37 98 82v153H-30Z" filter="url(#fullPaint)" />
+              <path class="home-mountain-front" d="M-20 468c66-68 140-104 223-108 86-4 155 25 208 89 49-66 106-98 171-96 59 2 107 20 145 55v101H-20Z" filter="url(#fullPaint)" />
+              <g class="home-mountain-marks" filter="url(#fullDryBrush)">
+                <path d="M142 344l-61 72M273 335l-68 93M511 324l-65 91M624 349l-58 67" />
+              </g>
+
+              <g class="asset always feature-lighthouse full-lighthouse" filter="url(#fullDryBrush)" aria-label="远处的灯塔">
+                <path class="lighthouse-beam" d="M650 364 444 329 650 388Z" />
+                <path class="lighthouse-tower" d="M638 380h31l8 76-48-1Z" />
+                <path class="lighthouse-roof" d="M631 381c8-11 24-15 38-2l-3 9h-37Z" />
+                <rect class="lighthouse-lantern" x="637" y="372" width="27" height="12" rx="2" />
+                <path class="lighthouse-window" d="M646 398h12l1 14h-12Z" />
+                <path class="lighthouse-base" d="M625 454c14-6 32-6 51 0l8 8h-68Z" />
+              </g>
+
+              <rect class="home-water" y="442" width="720" height="478" />
+              <path class="home-water-paint home-water-paint-one" d="M-20 474c116-29 225-26 328 8 98 33 207 31 327-6 38-12 74-10 105 4v194H-20Z" />
+              <path class="home-water-paint home-water-paint-two" d="M-20 720c119-26 232-19 341 21 93 34 194 31 302-7 42-15 81-13 117 5v181H-20Z" />
+              <g class="home-water-lines" filter="url(#fullDryBrush)">
+                <path d="M47 525c57 9 113 8 168-3M488 532c55 8 108 6 159-5M32 821c47 10 94 9 141-2M517 844c51 10 99 9 145-3" />
+              </g>
+
+              <path class="home-island-rim" d="M72 631c87-57 190-83 310-78 132 5 237 43 309 113 18 18 18 37-1 57-64 55-168 84-311 88-145 4-258-22-329-79-18-15-11-56 22-101Z" filter="url(#fullPaint)" />
+              <path class="home-island-grass" d="M90 625c79-42 174-61 286-57 123 4 221 37 291 97 16 14 16 29-2 45-62 45-158 68-288 70-132 2-235-19-303-65-17-12-12-45 16-90Z" filter="url(#fullPaint)" />
+              <path class="home-island-paint" d="M86 677c103-22 199-17 288 15 91 33 188 30 290-8-5 28-31 49-76 64-67 22-144 32-231 30-113-3-204-23-271-61Z" filter="url(#fullDryBrush)" />
+              <g class="home-grass-marks" filter="url(#fullDryBrush)">
+                <path d="M127 663l26-9M194 728l32-8M547 678l28-10M602 723l25-8" />
+              </g>
+
+              <path d="M0 0h720v920H0Z" fill="transparent" filter="url(#fullCanvas)" opacity=".9" pointer-events="none" />
+
+              <g class="asset feature-home-milestone home-annex" filter="url(#fullPaint)">
+                <path class="home-annex-shadow" d="M467 650c54 18 111 18 171-2" />
+                <path class="home-annex-wall" d="M472 520l139-2 4 129-144 2Z" />
+                <path class="home-annex-roof" d="M451 528l83-82 102 74-20 24-80-54-65 61Z" />
+                <path class="home-annex-window" d="M550 563l30-1 2 32-31 1Z" />
+                <path class="home-annex-window-light" d="M555 568l20-1 1 22-21 1Z" />
+                <path class="home-annex-doorstep" d="M593 639c15 5 28 6 42 2" />
+              </g>
+
+              <g class="asset always home-house" filter="url(#fullPaint)">
+                <path class="home-house-shadow" d="M270 654c73 22 159 22 258 0" />
+                <path class="home-house-wall" d="M278 456l212-2 2 192-214 4Z" />
+                <path class="home-house-roof" d="M246 466l137-135 147 130-27 25-119-104-105 108Z" />
+                <path class="home-house-chimney" d="M295 414v-75h17v58" />
+                <path class="home-house-door" d="M371 576h34v73h-34Z" />
+                <path class="asset feature-family family-growth family-growth-two home-house-door-interior" d="M371 576h34v73h-34Z" />
+                <path class="asset feature-family family-growth family-growth-two home-house-door-open" d="M405 576l24 9-1 59-23 5Z" />
+                <circle class="asset feature-family family-growth family-growth-two home-house-door-knob" cx="422" cy="615" r="2.8" />
+                <path class="home-house-window" d="M317 519l31 1-1 32-29-2Z" />
+                <path class="feature-family house-window-glow" d="M317 519l31 1-1 32-29-2Z" />
+                <path class="asset feature-family family-growth family-growth-three home-door-light home-door-light-wide" d="M371 643c-13 22-34 40-64 55 52 15 105 13 158-7-29-12-49-28-61-49Z" />
+                <path class="asset feature-family family-growth family-growth-two home-door-light home-door-light-near" d="M376 642c-6 16-19 29-39 40 33 10 67 9 101-4-18-9-29-21-35-36Z" />
+              </g>
+
+              <g class="asset feature-food home-kitchen-smoke" filter="url(#fullDryBrush)">
+                <path d="M302 333c-20-21-15-43 13-61 24-16 29-37 14-63" />
+                <path class="kitchen-growth kitchen-growth-two" d="M315 330c-12-17-7-32 15-46" />
+                <path class="kitchen-growth kitchen-growth-three" d="M292 315c-31-34-28-66 10-95" />
+              </g>
+
+              <path class="home-house-path" d="M388 648c13 39-6 68-57 88-46 18-78 39-95 65" filter="url(#fullDryBrush)" />
+              <g class="asset feature-exercise home-path-growth" filter="url(#fullDryBrush)">
+                <path class="home-path-extra home-path-extra-one" d="M333 731c58-21 114-18 168 4 25 10 43 22 55 36" />
+                <path class="path-growth path-growth-two" d="M499 735c55-8 101 1 139 28" />
+                <path class="path-growth path-growth-three" d="M236 800c-44 15-82 14-114-2" />
+              </g>
+
+              <g class="home-boat-arrival">
+                <g class="asset always home-boat" transform="rotate(5 156 838)">
+                  <path class="home-boat-shadow" d="M70 851c51-15 111-12 169 5-27 18-69 27-126 25-22-6-36-16-43-30Z" filter="url(#fullDryBrush)" />
+                  <path class="home-boat-body" d="M73 819c50-20 107-21 170-1-25 35-67 49-126 42-24-5-39-19-44-41Z" filter="url(#fullPaint)" />
+                  <path class="home-boat-opening" d="M91 820c41-12 84-12 130 0-24 16-59 22-103 17-12-3-21-8-27-17Z" />
+                  <path class="home-boat-rim" d="M73 819c50-20 107-21 170-1-25 35-67 49-126 42-24-5-39-19-44-41Z" />
+                  <path class="home-boat-seat" d="M119 815l7 28M173 810l7 32" />
+                  <path class="home-boat-highlight" d="M89 845c31 11 72 12 111 1" />
+                </g>
+                <g
+                  class="asset feature-travel home-travel-marker"
+                  id="travel-marker"
+                  role="button"
+                  tabindex="-1"
+                  aria-hidden="true"
+                  aria-labelledby="travel-marker-title"
+                  filter="url(#fullPaint)"
+                >
+                  <title id="travel-marker-title">旅行小旗</title>
+                  <rect class="home-travel-hit-area" x="146" y="711" width="104" height="122" rx="20" />
+                  <path class="home-travel-mast" d="M171 816c3-28 2-57-1-87" />
+                  <path class="home-travel-flag" d="M171 733c21-13 42-12 64 3-18 15-39 19-64 12Z" />
+                  <path class="home-travel-flag-mark" d="M184 739c9-3 17-2 25 3" />
+                  <circle class="travel-growth travel-growth-two home-travel-memory-dot" cx="214" cy="739" r="3.5" />
+                  <circle class="travel-growth travel-growth-three home-travel-memory-dot" cx="222" cy="737" r="3.5" />
+                  <path class="home-travel-knot" d="M163 813c8-7 17-8 26-2" />
+                </g>
+              </g>
+
+              <g class="asset always home-birds">
+                <path d="M72 218c18-12 36-12 54 0M126 218c18-12 36-12 54 0M574 194c17-11 34-11 51 0M625 194c17-11 34-11 51 0" />
+              </g>
+
+              <g class="asset feature-work home-work-boats">
+                <g class="home-work-boat home-work-boat-left" data-zone="water" filter="url(#fullPaint)">
+                  <path class="home-work-boat-wake" d="M23 548c38 10 78 9 119-4" />
+                  <path class="home-work-boat-shadow" d="M35 531c29-8 60-7 91 4-14 18-36 25-67 21-13-5-21-13-24-25Z" />
+                  <path class="home-work-boat-hull" d="M34 520c30-10 62-9 96 3-13 20-37 29-70 24-14-5-23-14-26-27Z" />
+                  <path class="home-work-boat-rim" d="M34 520c30-10 62-9 96 3" />
+                  <path class="home-work-boat-mast" d="M79 517v-58" />
+                  <path class="home-work-boat-sail home-work-boat-sail-light" d="M75 464c-21 14-31 30-29 48l29 2Z" />
+                  <path class="home-work-boat-sail home-work-boat-sail-warm" d="M83 465c22 14 32 29 31 46l-31 4Z" />
+                </g>
+                <g class="home-work-boat home-work-boat-right" data-zone="water" transform="translate(590 100) scale(.78)" filter="url(#fullPaint)">
+                  <path class="home-work-boat-wake" d="M23 548c38 10 78 9 119-4" />
+                  <path class="home-work-boat-shadow" d="M35 531c29-8 60-7 91 4-14 18-36 25-67 21-13-5-21-13-24-25Z" />
+                  <path class="home-work-boat-hull" d="M34 520c30-10 62-9 96 3-13 20-37 29-70 24-14-5-23-14-26-27Z" />
+                  <path class="home-work-boat-rim" d="M34 520c30-10 62-9 96 3" />
+                  <path class="home-work-boat-mast" d="M79 517v-58" />
+                  <path class="home-work-boat-sail home-work-boat-sail-light" d="M75 464c-21 14-31 30-29 48l29 2Z" />
+                  <path class="home-work-boat-sail home-work-boat-sail-warm" d="M83 465c22 14 32 29 31 46l-31 4Z" />
+                </g>
+                <g class="home-work-boat home-work-boat-far" data-zone="water" transform="translate(180 225) scale(.48)" filter="url(#fullPaint)">
+                  <path class="home-work-boat-wake" d="M23 548c38 10 78 9 119-4" />
+                  <path class="home-work-boat-shadow" d="M35 531c29-8 60-7 91 4-14 18-36 25-67 21-13-5-21-13-24-25Z" />
+                  <path class="home-work-boat-hull" d="M34 520c30-10 62-9 96 3-13 20-37 29-70 24-14-5-23-14-26-27Z" />
+                  <path class="home-work-boat-rim" d="M34 520c30-10 62-9 96 3" />
+                  <path class="home-work-boat-mast" d="M79 517v-58" />
+                  <path class="home-work-boat-sail home-work-boat-sail-light" d="M75 464c-21 14-31 30-29 48l29 2Z" />
+                  <path class="home-work-boat-sail home-work-boat-sail-warm" d="M83 465c22 14 32 29 31 46l-31 4Z" />
+                </g>
+              </g>
+
+              <g class="asset home-busy-fleet" filter="url(#fullPaint)">
+                <g class="busy-boat-position" transform="translate(58 520) rotate(-4) scale(.92)">
+                  <use class="busy-boat-use busy-boat-one" href="#busyWorkBoat" />
+                </g>
+                <g class="busy-boat-position" transform="translate(202 506) rotate(3) scale(.7)">
+                  <use class="busy-boat-use busy-boat-two" href="#busyWorkBoat" />
+                </g>
+                <g class="busy-boat-position" transform="translate(515 508) rotate(-3) scale(.72)">
+                  <use class="busy-boat-use busy-boat-three" href="#busyWorkBoat" />
+                </g>
+                <g class="busy-boat-position" transform="translate(662 525) rotate(4) scale(.9)">
+                  <use class="busy-boat-use busy-boat-four" href="#busyWorkBoat" />
+                </g>
+                <g class="busy-boat-position" transform="translate(16 642) rotate(-8) scale(1.02)">
+                  <use class="busy-boat-use busy-boat-five" href="#busyWorkBoat" />
+                </g>
+                <g class="busy-boat-position" transform="translate(704 650) rotate(8) scale(1.04)">
+                  <use class="busy-boat-use busy-boat-six" href="#busyWorkBoat" />
+                </g>
+                <g class="busy-boat-position" transform="translate(35 772) rotate(-10) scale(.94)">
+                  <use class="busy-boat-use busy-boat-seven" href="#busyWorkBoat" />
+                </g>
+                <g class="busy-boat-position" transform="translate(686 785) rotate(10) scale(.96)">
+                  <use class="busy-boat-use busy-boat-eight" href="#busyWorkBoat" />
+                </g>
+                <g class="busy-boat-position" transform="translate(128 875) rotate(-5) scale(.9)">
+                  <use class="busy-boat-use busy-boat-nine" href="#busyWorkBoat" />
+                </g>
+                <g class="busy-boat-position" transform="translate(286 904) rotate(-2) scale(.78)">
+                  <use class="busy-boat-use busy-boat-ten" href="#busyWorkBoat" />
+                </g>
+                <g class="busy-boat-position" transform="translate(448 906) rotate(2) scale(.82)">
+                  <use class="busy-boat-use busy-boat-eleven" href="#busyWorkBoat" />
+                </g>
+                <g class="busy-boat-position" transform="translate(602 878) rotate(6) scale(.94)">
+                  <use class="busy-boat-use busy-boat-twelve" href="#busyWorkBoat" />
+                </g>
+              </g>
+
+              <g class="asset feature-learning home-book" filter="url(#fullPaint)">
+                <path class="home-book-page home-book-page-left" d="M505 670c17-11 34-9 51 4l-2 38c-17-12-34-13-51-3Z" />
+                <path class="home-book-page home-book-page-right" d="M556 674c17-10 34-7 50 7l-3 37c-15-13-32-15-49-6Z" />
+                <path class="home-book-spine" d="M556 674l-2 38" />
+                <path class="home-book-mark" d="M579 682l-3 24" />
+                <path class="learning-growth learning-growth-two home-book-note" d="M514 684c10-3 20-1 29 5M514 696c9-2 18 0 27 4" />
+                <path class="learning-growth learning-growth-three home-book-note" d="M564 686c9-2 18 1 27 6M563 698c10-1 19 2 28 7" />
+              </g>
+
+              <g class="asset feature-social home-fire" filter="url(#fullPaint)">
+                <path class="home-fire-shadow" d="M564 763c25 9 52 10 80 1" />
+                <path class="home-fire-log" d="M568 752c21-12 43-13 68-2M574 745c19 14 39 17 61 7" />
+                <path class="home-fire-flame" d="M603 706c23 23 24 42 2 54-23-12-26-28-8-48l5-20Z" />
+                <path class="home-fire-core" d="M604 727c10 11 10 21 0 29-11-8-12-17-3-27Z" />
+              </g>
+
+              <g class="asset feature-running home-running-loop" filter="url(#fullDryBrush)" aria-label="草地上的跑步环线">
+                <path d="M121 706c68-38 146-39 216-8 54 24 112 24 181-8" />
+              </g>
+
+              <g class="asset feature-cycling home-bike-rack" filter="url(#fullPaint)" aria-label="岛边的自行车架">
+                <path class="home-bike-rack-line" d="M222 714v31M250 714v31M211 745h50" />
+                <circle class="home-bike-wheel" cx="219" cy="735" r="13" />
+                <circle class="home-bike-wheel" cx="252" cy="735" r="13" />
+                <path class="home-bike-frame" d="M219 735l14-20 19 20-19-1-7-19M233 715l9-7" />
+              </g>
+
+              <g class="asset feature-postcard home-postcard" filter="url(#fullPaint)" aria-label="旅行带回的明信片">
+                <path class="home-postcard-card" d="M196 672c21-7 43-4 61 7l-7 39c-20 7-40 5-59-6Z" />
+                <path class="home-postcard-mark" d="M208 684c11-3 22-2 33 2M207 696c8-2 17-1 25 2" />
+                <circle class="home-postcard-stamp" cx="244" cy="685" r="6" />
+              </g>
+
+              <g class="asset feature-tent home-tent" filter="url(#fullPaint)" aria-label="露营留下的帐篷">
+                <path class="home-tent-shadow" d="M105 735c36 9 75 9 111-1" />
+                <path class="home-tent-body" d="M106 730l54-78 57 78c-35 7-73 7-111 0Z" />
+                <path class="home-tent-opening" d="M151 730l9-35 10 35Z" />
+                <path class="home-tent-line" d="M160 652v78" />
+              </g>
+
+              <g class="asset feature-social home-social-gathering" filter="url(#fullDryBrush)" aria-label="篝火旁的人和长椅">
+                <path class="home-social-bench-shadow" d="M516 729c35 8 72 8 107 0" />
+                <path class="home-social-bench" d="M520 710h92M527 710l-7 24M604 710l8 24" />
+                <circle class="home-social-person-head" cx="537" cy="682" r="6" />
+                <path class="home-social-person" d="M531 690c5-5 12-4 16 2l-2 18h-16Z" />
+                <circle class="home-social-person-head" cx="584" cy="677" r="6" />
+                <path class="home-social-person" d="M578 685c5-5 12-4 16 2l-2 18h-16Z" />
+              </g>
+
+              <g class="asset feature-drink home-drink" filter="url(#fullPaint)" aria-label="篝火旁的饮料">
+                <path class="home-social-drink" d="M651 677h18l-2 21c-4 5-10 5-14 0Z" />
+                <path class="home-drink-straw" d="M663 678l7-12" />
+              </g>
+
+              <g class="asset feature-picnic home-picnic" filter="url(#fullPaint)" aria-label="相聚和饮食留下的野餐桌">
+                <path class="home-picnic-shadow" d="M447 793c38 9 83 9 121 0" />
+                <path class="home-picnic-top" d="M451 750c35-9 77-9 112 0l-4 16c-35 7-73 7-111 0Z" />
+                <path class="home-picnic-table" d="M461 766l8 30h9l-4-29M543 766l-6 30h9l8-31" />
+                <path class="home-picnic-bench" d="M435 780h33M546 780h34" />
+              </g>
+            </svg>
+          </div>
+        </section>
+
+        <section class="memory-strip" aria-label="岛上的这七天">
+          <div class="section-heading">
+            <h2>岛上的这七天</h2>
+            <div class="section-actions">
+              <button class="month-button" id="show-month" type="button" aria-label="查看本月天空" title="查看本月天空">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 15c1-3 3-4 6-3 2-3 7-2 8 2 2 0 4 2 4 4H5Z" />
+                  <path d="M4 7c3-2 6-2 9 0" />
+                </svg>
+                本月天空
+              </button>
+              <details class="memory-menu" id="memory-menu">
+                <summary aria-label="记忆操作">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="5" cy="12" r="1.2" />
+                    <circle cx="12" cy="12" r="1.2" />
+                    <circle cx="19" cy="12" r="1.2" />
+                  </svg>
+                </summary>
+                <div class="memory-menu-popover">
+                  <button id="clear-today" type="button">清空今天</button>
+                  <button id="reset-demo" type="button">清除全部记录</button>
+                </div>
+              </details>
+            </div>
+          </div>
+          <div class="memory-timeline-scroll">
+            <div class="memory-timeline">
+              <svg class="memory-tide-line" viewBox="0 0 700 44" preserveAspectRatio="none" aria-hidden="true">
+                <defs>
+                  <filter id="memoryLinePaint" x="-3%" y="-30%" width="106%" height="160%">
+                    <feTurbulence type="fractalNoise" baseFrequency=".02 .16" numOctaves="2" seed="91" result="memoryNoise" />
+                    <feDisplacementMap in="SourceGraphic" in2="memoryNoise" scale="5" xChannelSelector="R" yChannelSelector="G" />
+                  </filter>
+                </defs>
+                <path class="memory-tide-underpaint" d="M30 24C92 7 145 39 207 22S327 7 388 25s118 16 178-1 83-9 106 1" filter="url(#memoryLinePaint)" />
+                <path class="memory-tide-foam" d="M30 24C92 7 145 39 207 22S327 7 388 25s118 16 178-1 83-9 106 1" filter="url(#memoryLinePaint)" />
+              </svg>
+              <div class="day-list" id="day-list"></div>
+            </div>
+          </div>
+          <div class="memory-detail" id="memory-detail" aria-live="polite"></div>
+        </section>
+
+        <section class="month-memory" aria-labelledby="month-memory-title">
+          <div class="island-day-panel" aria-label="小岛当天记录">
+            <div class="island-progress-heading">
+              <div>
+                <p>小岛走到这里</p>
+                <strong class="month-progress-label" id="month-progress-label">还没有记录</strong>
+              </div>
+              <button class="month-play-button" id="month-play" type="button" aria-label="播放本月变化" title="播放本月变化" disabled>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path class="month-play-icon" d="m9 6 10 6-10 6Z" />
+                  <path class="month-pause-icon" d="M7 6h3v12H7Zm7 0h3v12h-3Z" />
+                </svg>
+              </button>
+            </div>
+            <input
+              class="island-day-range"
+              id="month-progress-range"
+              type="range"
+              min="0"
+              max="0"
+              value="0"
+              step="1"
+              aria-label="选择小岛当天记录"
+              disabled
+            />
+            <div class="island-day-note" id="island-day-note" aria-live="polite">
+              <time id="island-day-date"></time>
+              <p id="island-day-text">今天说一点生活，岛上就会留下第一道痕迹。</p>
+              <strong id="island-day-trace"></strong>
+            </div>
+          </div>
+          <div class="month-memory-summary">
+            <div class="month-memory-heading">
+              <div>
+                <h2 id="month-memory-title">这个月，岛上留下了什么</h2>
+              </div>
+            </div>
+            <p class="month-trace-overview" id="month-trace-overview"></p>
+            <div class="life-palette" id="life-palette" role="group" aria-label="这个月的生活色谱">
+              <div class="life-palette-canvas-wrap">
+                <canvas class="life-palette-canvas" aria-hidden="true"></canvas>
+                <div class="life-palette-labels"></div>
+              </div>
+              <div class="life-palette-detail" id="life-palette-detail" aria-live="polite">
+                <span>点击一个色块，看看它留下了什么。</span>
+              </div>
+            </div>
+            <p class="month-trace-empty" id="month-trace-empty"></p>
+          </div>
+        </section>
+      </main>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+
+    <dialog class="history-dialog" id="history-dialog" aria-labelledby="history-dialog-title">
+      <header>
+        <h2 id="history-dialog-title">小岛记录</h2>
+        <button class="icon-button" type="button" aria-label="关闭记录" data-dialog-close="history" data-sound="exit">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </header>
+      <div id="history-content" class="history-content"></div>
+    </dialog>
+
+    <dialog class="history-dialog month-dialog" id="month-dialog" aria-labelledby="month-dialog-title">
+      <header>
+        <div>
+          <p class="month-dialog-kicker" id="month-dialog-kicker"></p>
+          <h2 id="month-dialog-title">本月的天空</h2>
+        </div>
+        <button class="icon-button" type="button" aria-label="关闭本月天空" data-dialog-close="month" data-sound="exit">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </header>
+      <div class="month-content">
+        <p class="month-summary" id="month-summary"></p>
+        <div class="month-balance" id="month-balance"></div>
+        <div class="month-legend" aria-label="天气图例">
+          <span><i class="legend-bright"></i>放晴</span>
+          <span><i class="legend-calm"></i>平静</span>
+          <span><i class="legend-low"></i>低云</span>
+          <span><i class="legend-wind"></i>风起</span>
+          <span><i class="legend-storm"></i>雨浪</span>
+        </div>
+        <div class="month-calendar" id="month-calendar" aria-label="本月每日天气"></div>
+      </div>
+    </dialog>
+
+    <script src="./analyzer.js?v=19"></script>
+    <script src="./island-state.js?v=7"></script>
+    <script src="./life-palette.js?v=22"></script>
+    <script src="./sound-engine.js?v=4"></script>
+    <script src="./app.js?v=monthly-41"></script>
+  </body>
+</html>
