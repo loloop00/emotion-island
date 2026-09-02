@@ -1,0 +1,7 @@
+interface:
+  display_name: "简笔画视频制作 / Doodle Video Production"
+  short_description: "固定简笔画短视频制作与验收 / Repeatable doodle-video production and QA"
+  default_prompt: "Use $doodle-video to turn this idea into a short, visually clear doodle video and validate the rendered result."
+
+policy:
+  allow_implicit_invocation: true
