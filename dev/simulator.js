@@ -31,25 +31,61 @@ const lifeDays = [
   "约朋友去郊外徒步旅行，晚上一起野餐吃饭。",
 ];
 
+const lifeDaysEnglish = [
+  "Traveled to Hangzhou, ran beside West Lake, and camped by the water at night.",
+  "Ran five kilometers in the morning. The sunlight was just right, and I felt light.",
+  "Met friends from university for dinner and stayed talking until late.",
+  "Traveled to Xiamen, watched a beautiful sunset by the sea, and made a postcard.",
+  "Worked out at the gym in the evening. The shower afterward felt wonderful.",
+  "Friends came over for dinner. We ate and talked at the same time.",
+  "Hiked this weekend and took lots of photos of the view.",
+  "Traveled to Chengdu and tried lots of local snacks.",
+  "Met a friend for coffee and caught up on life lately.",
+  "Cycled along the river. The wind felt just right.",
+  "Took a break in Yunnan and watched the clouds somewhere new.",
+  "Met old classmates and talked about the things we used to do.",
+  "Did yoga in the morning and swam at night. It was a lot of exercise.",
+  "Traveled to the seaside and listened to the waves all day.",
+  "Visited an exhibition with a friend, then had dinner together.",
+  "Ran and stretched today. My body feels lighter than it did a few days ago.",
+  "Traveled to Suzhou and wandered slowly through the old streets.",
+  "Played ball with friends, then had drinks and talked afterward.",
+  "Had dinner with a few friends and laughed all evening.",
+  "Traveled to Qingdao and stood in the sea wind for a long time.",
+  "Worked out at the gym and gave myself some quiet space afterward.",
+  "Went shopping with a friend and decided to see a movie on the way.",
+  "Hiked while traveling. I was tired, but the view was worth it.",
+  "Ran and stretched this morning. After a shower, I felt full of energy.",
+  "A friend came over, and we talked late into the night.",
+  "Visited Dali. The wind by the lake made everything feel calm.",
+  "Got together with friends for food and conversation.",
+  "Cycled to the park and happened to meet a friend there.",
+  "Traveled to Macau and shared the photos with friends afterward.",
+  "Hiked in the countryside with friends, then had a picnic at night.",
+];
+
 const scenarioConfigs = {
   life: {
-    label: "旅行、运动、朋友聚会很多的月份",
-    copy: "这个月一直在路上、运动场和朋友身边，岛上也留下了帐篷、明信片和野餐桌。",
+    labelKey: "sim.scenario.life.label",
+    copyKey: "sim.scenario.life.copy",
     entries: lifeDays,
   },
 };
 
-const traceNames = {
-  homeMilestone: "主要痕迹：小屋扩展",
-  travel: "主要痕迹：旅行记忆",
-  family: "主要痕迹：家庭灯光",
-  exercise: "主要痕迹：运动",
-  social: "主要痕迹：篝火温度",
-  learning: "主要痕迹：阅读痕迹",
-  food: "主要痕迹：厨房烟火",
-  work: "主要痕迹：远处港湾",
-  "": "仅改变当天的天气",
+const traceNameKeys = {
+  homeMilestone: "sim.trace.homeMilestone",
+  travel: "sim.trace.travel",
+  family: "sim.trace.family",
+  exercise: "sim.trace.exercise",
+  social: "sim.trace.social",
+  learning: "sim.trace.learning",
+  food: "sim.trace.food",
+  work: "sim.trace.work",
+  "": "sim.trace.empty",
 };
+
+const i18n = globalThis.EmotionIslandI18n;
+const t = (key, vars = {}) => i18n?.t(key, vars) ?? key;
 
 function formatDateKey(date) {
   const year = date.getFullYear();
@@ -95,10 +131,22 @@ const playButton = document.querySelector("#play-days");
 const summaryPaletteRenderer = globalThis.EmotionIslandLifePalette.createLifePalette(summaryPalette);
 let playTimer = 0;
 
-document.title = `今天的小岛 · ${scenarioConfig.label}`;
-scenarioKicker.textContent = "仅用于展示 · 固定 30 天样例";
-scenarioTitle.textContent = scenarioConfig.label;
-scenarioCopy.textContent = scenarioConfig.copy;
+function applyScenarioCopy() {
+  document.title = `${t("app.title")} · ${t(scenarioConfig.labelKey)}`;
+  scenarioKicker.textContent = t("sim.kicker");
+  scenarioTitle.textContent = t(scenarioConfig.labelKey);
+  scenarioCopy.textContent = t(scenarioConfig.copyKey);
+}
+
+applyScenarioCopy();
+
+function syncPlaybackLabel() {
+  const label = t(playTimer ? "sim.pause" : "sim.play");
+  playButton.setAttribute("aria-label", label);
+  playButton.title = label;
+}
+
+syncPlaybackLabel();
 function syncPreviewHeight() {
   window.requestAnimationFrame(() => {
     const previewHeight = frame.contentDocument?.documentElement.scrollHeight;
@@ -110,23 +158,23 @@ function renderSummary(state, visibleEntries) {
   const paletteItems = globalThis.EmotionIslandState.buildLifePalette(visibleEntries);
   summaryPaletteRenderer.render(paletteItems);
   summaryOverview.textContent = state.dayCount
-    ? `这 ${state.dayCount} 天，岛上慢慢有了这些动静。`
-    : "岛还在等第一段生活。";
-  summaryEmpty.textContent = state.dayCount ? "" : "今天说一点生活，岛上就会留下第一道痕迹。";
+    ? t("sim.overview", { days: state.dayCount })
+    : t("sim.emptyOverview");
+  summaryEmpty.textContent = state.dayCount ? "" : t("sim.emptyPrompt");
 }
 
 function renderDay(dayNumber) {
   const index = Math.max(0, Math.min(entries.length - 1, Number(dayNumber) - 1));
   const entry = entries[index];
   range.value = String(index + 1);
-  dayOutput.textContent = `第 ${index + 1} 天`;
+  dayOutput.textContent = t("sim.day", { day: index + 1 });
   dateOutput.textContent = entry.date;
-  textOutput.textContent = entry.rawText;
+  textOutput.textContent = i18n?.getLanguage?.() === "en" ? lifeDaysEnglish[index] : entry.rawText;
 
   const previewApp = frame.contentWindow?.EmotionIslandApp;
   if (!previewApp) return;
   const state = previewApp.previewEntries(entries, entry.date);
-  traceOutput.textContent = traceNames[state.latestTrace] || traceNames[""];
+  traceOutput.textContent = t(traceNameKeys[state.latestTrace] || traceNameKeys[""]);
   renderSummary(state, entries.filter((item) => item.date <= entry.date));
   syncPreviewHeight();
 }
@@ -135,7 +183,7 @@ function stopPlayback() {
   window.clearInterval(playTimer);
   playTimer = 0;
   playButton.classList.remove("is-playing");
-  playButton.setAttribute("aria-label", "播放 30 天变化");
+  syncPlaybackLabel();
 }
 
 function togglePlayback() {
@@ -145,7 +193,7 @@ function togglePlayback() {
   }
   if (Number(range.value) >= 30) renderDay(1);
   playButton.classList.add("is-playing");
-  playButton.setAttribute("aria-label", "暂停播放");
+  syncPlaybackLabel();
   playTimer = window.setInterval(() => {
     const nextDay = Number(range.value) + 1;
     if (nextDay > 30) {
@@ -163,3 +211,11 @@ range.addEventListener("input", () => {
 
 playButton.addEventListener("click", togglePlayback);
 frame.addEventListener("load", () => renderDay(30));
+document.querySelector("#language-toggle")?.addEventListener("click", () => i18n?.toggle?.());
+document.addEventListener("emotion-island-language-change", () => {
+  applyScenarioCopy();
+  i18n?.applyStatic?.(document);
+  syncPlaybackLabel();
+  frame.contentWindow?.EmotionIslandI18n?.setLanguage(i18n?.getLanguage?.());
+  renderDay(range.value);
+});

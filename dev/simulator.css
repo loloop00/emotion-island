@@ -11,6 +11,10 @@
   background: #eef0eb;
 }
 
+html[lang="en"] {
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -68,6 +72,16 @@ h1 {
   display: grid;
   justify-items: end;
   gap: 10px;
+}
+
+.sim-language-toggle {
+  padding: 7px 11px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 .scenario-links {

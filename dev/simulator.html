@@ -15,19 +15,24 @@
         <p class="sim-scenario-copy" id="sim-scenario-copy"></p>
       </div>
       <div class="sim-header-actions">
-        <a href="../index.html">返回主页</a>
+        <button class="sim-language-toggle" id="language-toggle" type="button" aria-label="切换到 English" title="切换到 English">
+          <span data-language-current>中</span>
+          <span aria-hidden="true">/</span>
+          <span data-language-next>EN</span>
+        </button>
+        <a href="../index.html" data-i18n="sim.back">返回主页</a>
       </div>
     </header>
 
     <main class="sim-layout">
-      <section class="sim-preview" aria-label="小岛画面预览">
-        <iframe id="island-frame" src="../index.html?embed=simulator&v=monthly-41" title="小岛第二视角模拟画面"></iframe>
+      <section class="sim-preview" data-i18n-aria-label="sim.previewAria">
+        <iframe id="island-frame" src="../index.html?embed=simulator&v=monthly-41" data-i18n-title="sim.previewTitle" title="小岛第二视角模拟画面"></iframe>
       </section>
 
-      <section class="sim-controls" aria-label="模拟控制">
+      <section class="sim-controls" data-i18n-aria-label="sim.controlsAria">
         <div class="day-control">
           <div>
-            <span>小岛走到这里</span>
+            <span data-i18n="sim.dayKicker">小岛走到这里</span>
             <strong id="day-output">第 1 天</strong>
           </div>
           <button id="play-days" type="button" aria-label="播放 30 天变化" title="播放 30 天变化">
@@ -37,7 +42,7 @@
           </button>
         </div>
 
-        <input id="day-range" type="range" min="1" max="30" value="30" aria-label="选择模拟天数" />
+        <input id="day-range" type="range" min="1" max="30" value="30" data-i18n-aria-label="sim.rangeAria" aria-label="选择模拟天数" />
 
         <div class="daily-note">
           <span id="date-output"></span>
@@ -49,22 +54,23 @@
 
       <section class="sim-month-summary" aria-labelledby="sim-month-summary-title">
         <div class="sim-month-summary-heading">
-          <h2 id="sim-month-summary-title">这个月，岛上留下了什么</h2>
+          <h2 id="sim-month-summary-title" data-i18n="sim.summaryTitle">这个月，岛上留下了什么</h2>
         </div>
         <p class="sim-month-summary-overview" id="sim-month-summary-overview"></p>
-        <div class="life-palette sim-life-palette" id="sim-life-palette" role="group" aria-label="这个月的生活色谱">
+        <div class="life-palette sim-life-palette" id="sim-life-palette" role="group" data-i18n-aria-label="sim.paletteAria" aria-label="这个月的生活色谱">
           <div class="life-palette-canvas-wrap">
             <canvas class="life-palette-canvas" aria-hidden="true"></canvas>
             <div class="life-palette-labels"></div>
           </div>
           <div class="life-palette-detail" id="sim-life-palette-detail" aria-live="polite">
-            <span>点击一个色块，看看它留下了什么。</span>
+            <span data-i18n="sim.sampleDetail">点击一个色块，看看它留下了什么。</span>
           </div>
         </div>
         <p class="sim-month-summary-empty" id="sim-month-summary-empty"></p>
       </section>
     </main>
 
+    <script src="../i18n.js?v=2"></script>
     <script src="../analyzer.js?v=19"></script>
     <script src="../island-state.js?v=7"></script>
     <script src="../life-palette.js?v=22"></script>
