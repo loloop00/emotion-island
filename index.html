@@ -12,7 +12,7 @@
   <body>
     <div class="app-shell">
       <header class="topbar">
-        <a class="brand" href="#" aria-label="今天的小岛首页">
+        <a class="brand" href="#" data-i18n-aria-label="brand.homeAria">
           <span class="brand-mark" aria-hidden="true">
             <svg viewBox="0 0 48 48" role="img">
               <defs>
@@ -30,28 +30,33 @@
             </svg>
           </span>
           <span>
-            <strong>今天的小岛</strong>
-            <small>Today's Island</small>
+            <strong data-i18n="brand.name">今天的小岛</strong>
+            <small data-i18n="brand.subtitle">Today's Island</small>
           </span>
         </a>
-        <nav class="top-actions" aria-label="主要操作">
-          <button class="ghost-button" id="show-history" type="button" aria-label="打开小岛记录" title="打开小岛记录">
+        <nav class="top-actions" data-i18n-aria-label="nav.mainAria">
+          <button class="ghost-button language-toggle" id="language-toggle" type="button" aria-label="切换到 English" title="切换到 English">
+            <span data-language-current>中</span>
+            <span aria-hidden="true">/</span>
+            <span data-language-next>EN</span>
+          </button>
+          <button class="ghost-button" id="show-history" type="button" data-i18n-aria-label="nav.historyAria" data-i18n-title="nav.historyAria">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M4 12a8 8 0 1 0 2.34-5.66" />
               <path d="M4 4v6h6" />
               <path d="M12 8v5l3 2" />
             </svg>
-            <span class="history-button-label history-button-label-full">小岛记录</span>
-            <span class="history-button-label history-button-label-short">记录</span>
+            <span class="history-button-label history-button-label-full" data-i18n="nav.history.full">小岛记录</span>
+            <span class="history-button-label history-button-label-short" data-i18n="nav.history.short">记录</span>
           </button>
         </nav>
       </header>
 
       <main>
-        <section class="hero" aria-label="今天的小岛">
+        <section class="hero" data-i18n-aria-label="hero.aria">
           <div class="entry-panel">
             <div class="entry-copy">
-              <h1>今天过得怎么样？</h1>
+              <h1 data-i18n="hero.title">今天过得怎么样？</h1>
             </div>
 
             <div class="voice-box" id="voice-box">
@@ -60,9 +65,9 @@
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z" />
                   </svg>
-                  <textarea id="daily-input" rows="1" placeholder="写下今天" aria-label="写下今天" aria-describedby="voice-hint"></textarea>
+                  <textarea id="daily-input" rows="1" data-i18n-placeholder="input.placeholder" data-i18n-aria-label="input.aria" aria-describedby="voice-hint"></textarea>
                 </label>
-                <button class="mic-button" id="mic-button" type="button" aria-label="开始语音输入">
+                <button class="mic-button" id="mic-button" type="button" data-i18n-aria-label="voice.start">
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <g class="mic-symbol">
                       <path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z" />
@@ -74,8 +79,8 @@
                   </svg>
                 </button>
               </div>
-              <span class="sr-only" id="voice-status" aria-live="polite">语音输入已准备好</span>
-              <span class="sr-only" id="voice-hint">文字输入默认开启，也可以使用麦克风</span>
+              <span class="sr-only" id="voice-status" aria-live="polite" data-i18n="voice.ready">语音输入已准备好</span>
+              <span class="sr-only" id="voice-hint" data-i18n="voice.hint">文字输入默认开启，也可以使用麦克风</span>
             </div>
 
             <button class="primary-button" id="submit-day" type="button">
@@ -83,13 +88,13 @@
                 <path d="M12 2l1.6 5.2L19 9l-5.4 1.8L12 16l-1.6-5.2L5 9l5.4-1.8L12 2Z" />
                 <path d="M19 15l.8 2.4L22 18l-2.2.6L19 21l-.8-2.4L16 18l2.2-.6L19 15Z" />
               </svg>
-              更新今天的小岛
+              <span data-i18n="submit">更新今天的小岛</span>
             </button>
 
             <div class="entry-ambient" id="entry-ambient" aria-live="polite">
               <div class="entry-ambient-copy">
-                <span>此刻的海面</span>
-                <strong id="entry-ambient-copy">海面还在轻轻动着。</strong>
+                <span data-i18n="ambient.kicker">此刻的海面</span>
+                <strong id="entry-ambient-copy" data-i18n="ambient.waiting">海面还在轻轻动着。</strong>
               </div>
               <svg class="entry-ambient-sketch" viewBox="0 0 340 126" aria-hidden="true">
                 <path class="entry-ambient-horizon" d="M15 42c48-16 92-14 132 2s82 18 119 4 52-15 59-9" />
@@ -102,34 +107,34 @@
 
           <div class="island-stage" id="island-stage" aria-live="polite">
             <div class="message-bubble">
-              <p id="island-line">今天的小岛，正在等你带回一点生活。</p>
+              <p id="island-line" data-i18n="waiting.today">今天的小岛，正在等你带回一点生活。</p>
             </div>
 
-            <section class="island-feedback" id="island-feedback" aria-label="今天的理解" hidden>
+            <section class="island-feedback" id="island-feedback" data-i18n-aria-label="feedback.aria" hidden>
               <div class="island-feedback-topline">
                 <p id="island-feedback-summary"></p>
                 <div class="island-feedback-actions">
-                  <button class="island-feedback-confirm" id="island-feedback-confirm" type="button">是的</button>
-                  <button class="island-feedback-edit" id="island-feedback-edit" type="button">改一下</button>
+                  <button class="island-feedback-confirm" id="island-feedback-confirm" type="button" data-i18n="feedback.confirm">是的</button>
+                  <button class="island-feedback-edit" id="island-feedback-edit" type="button" data-i18n="feedback.edit">改一下</button>
                 </div>
               </div>
               <div class="island-feedback-options" id="island-feedback-options" hidden></div>
             </section>
 
             <aside class="island-event-note" id="island-event-note" aria-live="polite" hidden>
-              <span>刚刚留下</span>
+              <span data-i18n="event.kicker">刚刚留下</span>
               <strong id="island-event-note-title"></strong>
               <p id="island-event-note-detail"></p>
             </aside>
 
-            <button class="view-switch" id="toggle-view" type="button" aria-pressed="false" aria-label="回到小屋" data-sound="exit">
+            <button class="view-switch" id="toggle-view" type="button" aria-pressed="false" data-i18n-aria-label="view.home" aria-label="回到小屋" data-sound="exit">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M8 3H3v5" />
                 <path d="M3 3l7 7" />
                 <path d="M16 21h5v-5" />
                 <path d="M21 21l-7-7" />
               </svg>
-              <span class="view-switch-label">回到小屋</span>
+              <span class="view-switch-label" data-i18n="view.home">回到小屋</span>
             </button>
 
             <div class="sky mood-calm" id="sky">
@@ -160,7 +165,7 @@
               </svg>
             </div>
 
-            <svg class="island-art island-art-close" id="closeup-art" viewBox="0 0 720 920" preserveAspectRatio="xMidYMid slice" role="img" aria-label="小岛一角的近景海面">
+            <svg class="island-art island-art-close" id="closeup-art" viewBox="0 0 720 920" preserveAspectRatio="xMidYMid slice" role="img" data-i18n-aria-label="island.closeAria" aria-label="小岛一角的近景海面">
               <defs>
                 <filter id="closePaint" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
                   <feTurbulence type="fractalNoise" baseFrequency=".018 .085" numOctaves="3" seed="21" result="paintNoise" />
@@ -215,7 +220,7 @@
                 <path d="M642 79l30-12M611 225l40-13M631 409l45-10M585 529l34-14M626 727l43-13M575 845l38-11" />
               </g>
 
-              <g class="asset always feature-lighthouse close-lighthouse" filter="url(#closeDryBrush)" aria-label="远处的灯塔">
+              <g class="asset always feature-lighthouse close-lighthouse" filter="url(#closeDryBrush)" data-i18n-aria-label="asset.lighthouse" aria-label="远处的灯塔">
                 <path class="lighthouse-beam" d="M640 248 426 207 640 275Z" />
                 <path class="lighthouse-tower" d="M629 265h35l9 128-53-1Z" />
                 <path class="lighthouse-roof" d="M621 266c9-13 27-18 43-3l-3 11h-42Z" />
@@ -224,7 +229,7 @@
                 <path class="lighthouse-base" d="M614 392c15-7 35-7 57 0l10 11h-78Z" />
               </g>
 
-              <g class="asset always close-sailboat" filter="url(#closePaint)" aria-label="海面上的小船">
+              <g class="asset always close-sailboat" filter="url(#closePaint)" data-i18n-aria-label="asset.boat" aria-label="海面上的小船">
                 <path class="close-boat-shadow" d="M204 730c44-12 90-10 132 5-22 13-54 17-94 13-19-4-31-10-38-18Z" />
                 <path class="close-boat-body" d="M208 700c35-13 78-13 119 0-14 28-46 39-83 33-21-4-32-14-36-33Z" />
                 <path class="close-boat-rim" d="M208 700c35-13 78-13 119 0-14 28-46 39-83 33-21-4-32-14-36-33Z" />
@@ -261,7 +266,7 @@
               </g>
             </svg>
 
-            <svg class="island-art island-art-full" id="island-art" viewBox="0 0 720 920" preserveAspectRatio="xMidYMid slice" role="img" aria-label="从海岸回到小屋前的近距离视角">
+            <svg class="island-art island-art-full" id="island-art" viewBox="0 0 720 920" preserveAspectRatio="xMidYMid slice" role="img" data-i18n-aria-label="island.fullAria" aria-label="从海岸回到小屋前的近距离视角">
               <defs>
                 <filter id="fullPaint" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
                   <feTurbulence type="fractalNoise" baseFrequency=".018 .085" numOctaves="3" seed="51" result="paintNoise" />
@@ -307,7 +312,7 @@
                 <path d="M142 344l-61 72M273 335l-68 93M511 324l-65 91M624 349l-58 67" />
               </g>
 
-              <g class="asset always feature-lighthouse full-lighthouse" filter="url(#fullDryBrush)" aria-label="远处的灯塔">
+              <g class="asset always feature-lighthouse full-lighthouse" filter="url(#fullDryBrush)" data-i18n-aria-label="asset.lighthouse" aria-label="远处的灯塔">
                 <path class="lighthouse-beam" d="M650 364 444 329 650 388Z" />
                 <path class="lighthouse-tower" d="M638 380h31l8 76-48-1Z" />
                 <path class="lighthouse-roof" d="M631 381c8-11 24-15 38-2l-3 9h-37Z" />
@@ -487,31 +492,31 @@
                 <path class="home-fire-core" d="M604 727c10 11 10 21 0 29-11-8-12-17-3-27Z" />
               </g>
 
-              <g class="asset feature-running home-running-loop" filter="url(#fullDryBrush)" aria-label="草地上的跑步环线">
+              <g class="asset feature-running home-running-loop" filter="url(#fullDryBrush)" data-i18n-aria-label="asset.running" aria-label="草地上的跑步环线">
                 <path d="M121 706c68-38 146-39 216-8 54 24 112 24 181-8" />
               </g>
 
-              <g class="asset feature-cycling home-bike-rack" filter="url(#fullPaint)" aria-label="岛边的自行车架">
+              <g class="asset feature-cycling home-bike-rack" filter="url(#fullPaint)" data-i18n-aria-label="asset.cycling" aria-label="岛边的自行车架">
                 <path class="home-bike-rack-line" d="M222 714v31M250 714v31M211 745h50" />
                 <circle class="home-bike-wheel" cx="219" cy="735" r="13" />
                 <circle class="home-bike-wheel" cx="252" cy="735" r="13" />
                 <path class="home-bike-frame" d="M219 735l14-20 19 20-19-1-7-19M233 715l9-7" />
               </g>
 
-              <g class="asset feature-postcard home-postcard" filter="url(#fullPaint)" aria-label="旅行带回的明信片">
+              <g class="asset feature-postcard home-postcard" filter="url(#fullPaint)" data-i18n-aria-label="asset.postcard" aria-label="旅行带回的明信片">
                 <path class="home-postcard-card" d="M196 672c21-7 43-4 61 7l-7 39c-20 7-40 5-59-6Z" />
                 <path class="home-postcard-mark" d="M208 684c11-3 22-2 33 2M207 696c8-2 17-1 25 2" />
                 <circle class="home-postcard-stamp" cx="244" cy="685" r="6" />
               </g>
 
-              <g class="asset feature-tent home-tent" filter="url(#fullPaint)" aria-label="露营留下的帐篷">
+              <g class="asset feature-tent home-tent" filter="url(#fullPaint)" data-i18n-aria-label="asset.tent" aria-label="露营留下的帐篷">
                 <path class="home-tent-shadow" d="M105 735c36 9 75 9 111-1" />
                 <path class="home-tent-body" d="M106 730l54-78 57 78c-35 7-73 7-111 0Z" />
                 <path class="home-tent-opening" d="M151 730l9-35 10 35Z" />
                 <path class="home-tent-line" d="M160 652v78" />
               </g>
 
-              <g class="asset feature-social home-social-gathering" filter="url(#fullDryBrush)" aria-label="篝火旁的人和长椅">
+              <g class="asset feature-social home-social-gathering" filter="url(#fullDryBrush)" data-i18n-aria-label="asset.social" aria-label="篝火旁的人和长椅">
                 <path class="home-social-bench-shadow" d="M516 729c35 8 72 8 107 0" />
                 <path class="home-social-bench" d="M520 710h92M527 710l-7 24M604 710l8 24" />
                 <circle class="home-social-person-head" cx="537" cy="682" r="6" />
@@ -520,12 +525,12 @@
                 <path class="home-social-person" d="M578 685c5-5 12-4 16 2l-2 18h-16Z" />
               </g>
 
-              <g class="asset feature-drink home-drink" filter="url(#fullPaint)" aria-label="篝火旁的饮料">
+              <g class="asset feature-drink home-drink" filter="url(#fullPaint)" data-i18n-aria-label="asset.drink" aria-label="篝火旁的饮料">
                 <path class="home-social-drink" d="M651 677h18l-2 21c-4 5-10 5-14 0Z" />
                 <path class="home-drink-straw" d="M663 678l7-12" />
               </g>
 
-              <g class="asset feature-picnic home-picnic" filter="url(#fullPaint)" aria-label="相聚和饮食留下的野餐桌">
+              <g class="asset feature-picnic home-picnic" filter="url(#fullPaint)" data-i18n-aria-label="asset.picnic" aria-label="相聚和饮食留下的野餐桌">
                 <path class="home-picnic-shadow" d="M447 793c38 9 83 9 121 0" />
                 <path class="home-picnic-top" d="M451 750c35-9 77-9 112 0l-4 16c-35 7-73 7-111 0Z" />
                 <path class="home-picnic-table" d="M461 766l8 30h9l-4-29M543 766l-6 30h9l8-31" />
@@ -535,19 +540,19 @@
           </div>
         </section>
 
-        <section class="memory-strip" aria-label="岛上的这七天">
+        <section class="memory-strip" data-i18n-aria-label="memory.sectionAria">
           <div class="section-heading">
-            <h2>岛上的这七天</h2>
+            <h2 data-i18n="memory.title">岛上的这七天</h2>
             <div class="section-actions">
-              <button class="month-button" id="show-month" type="button" aria-label="查看本月天空" title="查看本月天空">
+              <button class="month-button" id="show-month" type="button" data-i18n-aria-label="month.buttonAria" data-i18n-title="month.buttonAria">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M5 15c1-3 3-4 6-3 2-3 7-2 8 2 2 0 4 2 4 4H5Z" />
                   <path d="M4 7c3-2 6-2 9 0" />
                 </svg>
-                本月天空
+                <span data-i18n="month.button">本月天空</span>
               </button>
               <details class="memory-menu" id="memory-menu">
-                <summary aria-label="记忆操作">
+                <summary data-i18n-aria-label="memory.menuAria">
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <circle cx="5" cy="12" r="1.2" />
                     <circle cx="12" cy="12" r="1.2" />
@@ -555,8 +560,8 @@
                   </svg>
                 </summary>
                 <div class="memory-menu-popover">
-                  <button id="clear-today" type="button">清空今天</button>
-                  <button id="reset-demo" type="button">清除全部记录</button>
+                  <button id="clear-today" type="button" data-i18n="memory.clearToday">清空今天</button>
+                  <button id="reset-demo" type="button" data-i18n="memory.clearAll">清除全部记录</button>
                 </div>
               </details>
             </div>
@@ -580,11 +585,11 @@
         </section>
 
         <section class="month-memory" aria-labelledby="month-memory-title">
-          <div class="island-day-panel" aria-label="小岛当天记录">
+          <div class="island-day-panel" data-i18n-aria-label="islandDay.aria">
             <div class="island-progress-heading">
               <div>
-                <p>小岛走到这里</p>
-                <strong class="month-progress-label" id="month-progress-label">还没有记录</strong>
+                <p data-i18n="islandDay.kicker">小岛走到这里</p>
+                <strong class="month-progress-label" id="month-progress-label" data-i18n="islandDay.empty">还没有记录</strong>
               </div>
               <button class="month-play-button" id="month-play" type="button" aria-label="播放本月变化" title="播放本月变化" disabled>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -601,29 +606,30 @@
               max="0"
               value="0"
               step="1"
+              data-i18n-aria-label="islandDay.rangeAria"
               aria-label="选择小岛当天记录"
               disabled
             />
             <div class="island-day-note" id="island-day-note" aria-live="polite">
               <time id="island-day-date"></time>
-              <p id="island-day-text">今天说一点生活，岛上就会留下第一道痕迹。</p>
+              <p id="island-day-text" data-i18n="islandDay.prompt">今天说一点生活，岛上就会留下第一道痕迹。</p>
               <strong id="island-day-trace"></strong>
             </div>
           </div>
           <div class="month-memory-summary">
             <div class="month-memory-heading">
               <div>
-                <h2 id="month-memory-title">这个月，岛上留下了什么</h2>
+                <h2 id="month-memory-title" data-i18n="month.memoryTitle">这个月，岛上留下了什么</h2>
               </div>
             </div>
             <p class="month-trace-overview" id="month-trace-overview"></p>
-            <div class="life-palette" id="life-palette" role="group" aria-label="这个月的生活色谱">
+            <div class="life-palette" id="life-palette" role="group" data-i18n-aria-label="palette.aria" aria-label="这个月的生活色谱">
               <div class="life-palette-canvas-wrap">
                 <canvas class="life-palette-canvas" aria-hidden="true"></canvas>
                 <div class="life-palette-labels"></div>
               </div>
               <div class="life-palette-detail" id="life-palette-detail" aria-live="polite">
-                <span>点击一个色块，看看它留下了什么。</span>
+                <span data-i18n="palette.detail">点击一个色块，看看它留下了什么。</span>
               </div>
             </div>
             <p class="month-trace-empty" id="month-trace-empty"></p>
@@ -636,8 +642,8 @@
 
     <dialog class="history-dialog" id="history-dialog" aria-labelledby="history-dialog-title">
       <header>
-        <h2 id="history-dialog-title">小岛记录</h2>
-        <button class="icon-button" type="button" aria-label="关闭记录" data-dialog-close="history" data-sound="exit">
+        <h2 id="history-dialog-title" data-i18n="history.dialogTitle">小岛记录</h2>
+        <button class="icon-button" type="button" data-i18n-aria-label="history.dialogCloseAria" aria-label="关闭记录" data-dialog-close="history" data-sound="exit">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M18 6 6 18" />
             <path d="m6 6 12 12" />
@@ -651,9 +657,9 @@
       <header>
         <div>
           <p class="month-dialog-kicker" id="month-dialog-kicker"></p>
-          <h2 id="month-dialog-title">本月的天空</h2>
+          <h2 id="month-dialog-title" data-i18n="month.dialogTitle">本月的天空</h2>
         </div>
-        <button class="icon-button" type="button" aria-label="关闭本月天空" data-dialog-close="month" data-sound="exit">
+        <button class="icon-button" type="button" data-i18n-aria-label="month.dialogCloseAria" aria-label="关闭本月天空" data-dialog-close="month" data-sound="exit">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M18 6 6 18" />
             <path d="m6 6 12 12" />
@@ -663,17 +669,18 @@
       <div class="month-content">
         <p class="month-summary" id="month-summary"></p>
         <div class="month-balance" id="month-balance"></div>
-        <div class="month-legend" aria-label="天气图例">
-          <span><i class="legend-bright"></i>放晴</span>
-          <span><i class="legend-calm"></i>平静</span>
-          <span><i class="legend-low"></i>低云</span>
-          <span><i class="legend-wind"></i>风起</span>
-          <span><i class="legend-storm"></i>雨浪</span>
+        <div class="month-legend" data-i18n-aria-label="weather.legendAria" aria-label="天气图例">
+          <span><i class="legend-bright"></i><span data-i18n="weather.bright">放晴</span></span>
+          <span><i class="legend-calm"></i><span data-i18n="weather.calm">平静</span></span>
+          <span><i class="legend-low"></i><span data-i18n="weather.low">低云</span></span>
+          <span><i class="legend-wind"></i><span data-i18n="weather.wind">风起</span></span>
+          <span><i class="legend-storm"></i><span data-i18n="weather.storm">雨浪</span></span>
         </div>
-        <div class="month-calendar" id="month-calendar" aria-label="本月每日天气"></div>
+        <div class="month-calendar" id="month-calendar" data-i18n-aria-label="weather.calendarAria" aria-label="本月每日天气"></div>
       </div>
     </dialog>
 
+    <script src="./i18n.js?v=2"></script>
     <script src="./analyzer.js?v=19"></script>
     <script src="./island-state.js?v=7"></script>
     <script src="./life-palette.js?v=22"></script>

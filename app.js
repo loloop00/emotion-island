@@ -1,6 +1,16 @@
 const storageKey = "emotion-island.entries.v1";
 const dailyEntryLimit = 3;
-const dailyEntryLimitMessage = "今天的生活已经收好啦，明天再来继续。";
+const i18n = globalThis.EmotionIslandI18n;
+const t = (key, vars = {}) => i18n?.t(key, vars) ?? key;
+const translate = (value) => i18n?.translate(value) ?? value;
+const currentLocale = () => i18n?.locale?.() || "zh-CN";
+const isEnglish = () => i18n?.getLanguage?.() === "en";
+const dayCountLabel = (count) => t(count === 1 ? "count.day" : "count.days", { count });
+const weatherCountLabel = (count, chineseLabel, englishLabel) => (
+  isEnglish()
+    ? `${count} ${count === 1 ? englishLabel : `${englishLabel}s`}`
+    : `${count}天${chineseLabel}`
+);
 const {
   analysisVersion,
   featureRules,
@@ -126,6 +136,7 @@ const emotionCorrectionOptions = [
 
 const elements = {
   body: document.body,
+  languageToggle: document.querySelector("#language-toggle"),
   input: document.querySelector("#daily-input"),
   submit: document.querySelector("#submit-day"),
   mic: document.querySelector("#mic-button"),
@@ -250,6 +261,10 @@ function displayEmotionLabel(entry) {
   }[entry?.emotion] || entry?.emotion || "平静";
 }
 
+function displayEmotionText(entry) {
+  return translate(displayEmotionLabel(entry));
+}
+
 function withoutEmotionEvents(events) {
   return (Array.isArray(events) ? events : []).filter(
     (event) => !String(event?.key || "").startsWith("emotion-") && event?.key !== "weather-storm",
@@ -355,15 +370,15 @@ function syncBusyFleet(workDays) {
 }
 
 function busyWorkLine(workDays) {
-  if (workDays >= 28) return "今天港湾很忙，船影已经绕着小岛一圈了。";
-  if (workDays >= 14) return "今天港湾很忙，船影正在沿着海岸铺开。";
-  return "今天港湾很忙，船影正在一点点增加。";
+  if (workDays >= 28) return t("busy.today.full");
+  if (workDays >= 14) return t("busy.today.medium");
+  return t("busy.today.light");
 }
 
 function busyWorkMonthCopy(workDays) {
-  if (workDays >= 28) return `这个月有 ${workDays} 天都在工作，船影已经绕着小岛一圈。`;
-  if (workDays >= 14) return `这个月有 ${workDays} 天都在工作，船影也沿着海岸慢慢铺开。`;
-  return `这个月有 ${workDays} 天都在工作，船影正在一点点增加。`;
+  if (workDays >= 28) return t("busy.month.full", { days: workDays });
+  if (workDays >= 14) return t("busy.month.medium", { days: workDays });
+  return t("busy.month.light", { days: workDays });
 }
 
 function resizeTextInput() {
@@ -379,11 +394,11 @@ function resizeTextInput() {
 function setVoiceState(state) {
   const transcript = elements.input.value.trim();
   const copy = {
-    idle: ["点一下，慢慢说", "不用组织得很完整", "开始语音输入"],
-    listening: ["正在听，慢慢说就好", "再点一下就暂停", "暂停语音输入"],
-    recognized: ["听到了，准备更新小岛", "可以继续说，也可以直接更新小岛", "继续语音输入"],
-    error: ["语音暂时不可用", "也可以用文字聊聊", "开始语音输入"],
-    unsupported: ["可以用文字聊聊", "当前浏览器暂不支持语音输入", "语音输入不可用"],
+    idle: [t("speech.idle.status"), t("speech.idle.hint"), t("speech.idle.label")],
+    listening: [t("speech.listening.status"), t("speech.listening.hint"), t("speech.listening.label")],
+    recognized: [t("speech.recognized.status"), t("speech.recognized.hint"), t("speech.recognized.label")],
+    error: [t("speech.error.status"), t("speech.error.hint"), t("speech.error.label")],
+    unsupported: [t("speech.unsupported.status"), t("speech.unsupported.hint"), t("speech.unsupported.label")],
   };
   const [status, hint, label] = copy[state] || copy.idle;
 
@@ -480,12 +495,12 @@ function applyEntry(entry, options = {}) {
     const hasTravel = Boolean(latestTravel);
     elements.travelMarker.setAttribute("aria-hidden", String(!hasTravel));
     elements.travelMarker.setAttribute("tabindex", hasTravel ? "0" : "-1");
-    elements.travelMarker.dataset.place = latestTravel?.place || "远方";
+    elements.travelMarker.dataset.place = latestTravel?.place || t("travel.faraway");
     elements.travelMarker.dataset.date = latestTravel?.createdAt || "";
     if (elements.travelMarkerTitle) {
       elements.travelMarkerTitle.textContent = hasTravel
-        ? `从${latestTravel.place || "远方"}带回的旅行小旗`
-        : "旅行小旗";
+        ? t("travel.marker", { place: translate(latestTravel.place || t("travel.faraway")) })
+        : t("travel.flag");
     }
   }
   elements.islandLine.textContent = islandState.patterns.busyWork
@@ -499,18 +514,18 @@ function applyWaitingForTodayState(entries = []) {
   applyEntry(
     {
       mood: "mood-calm",
-      line: "今天的小岛，正在等你带回一点生活。",
+      line: t("waiting.today"),
       weatherLevel: "weather-light",
     },
     { entries },
   );
   elements.islandLine.textContent = hasPreviousRecord
-    ? "小岛还记得上次的风景，今天在等你。"
-    : "今天的小岛，正在等你带回一点生活。";
+    ? t("waiting.previous")
+    : t("waiting.today");
   if (elements.entryAmbientCopy) {
     elements.entryAmbientCopy.textContent = hasPreviousRecord
-      ? "今天还没有新的变化，海面先安静着。"
-      : "海面还在轻轻动着。";
+      ? t("waiting.noChange")
+      : t("ambient.waiting");
   }
 }
 
@@ -534,51 +549,51 @@ function animateIslandUpdate(entry, revealKey = "") {
 function describeIslandUpdate(entry) {
   const changes = [];
   const primaryTrace = resolvePrimaryTrace(entry);
-  if (entry.stormWeather) changes.push("风雨经过海面");
-  if (entry.mood === "mood-anxious") changes.push("云和风出现了");
-  if (entry.mood === "mood-sad") changes.push("岛上下起了小雨");
-  if (entry.mood === "mood-angry") changes.push("风浪变大了");
-  if (entry.mood === "mood-irritable" || entry.heatWeather) changes.push("阳光更强了");
-  if (entry.mood === "mood-bright") changes.push("阳光亮起来了");
-  if (entry.mood === "mood-unwell") changes.push("岛上起了薄雾");
-  if (entry.mood === "mood-tired") changes.push("风慢了下来");
-  if (entry.mood === "mood-flat") changes.push("海面安静了一些");
+  if (entry.stormWeather) changes.push(t("change.storm"));
+  if (entry.mood === "mood-anxious") changes.push(t("change.anxious"));
+  if (entry.mood === "mood-sad") changes.push(t("change.sad"));
+  if (entry.mood === "mood-angry") changes.push(t("change.angry"));
+  if (entry.mood === "mood-irritable" || entry.heatWeather) changes.push(t("change.irritable"));
+  if (entry.mood === "mood-bright") changes.push(t("change.bright"));
+  if (entry.mood === "mood-unwell") changes.push(t("change.unwell"));
+  if (entry.mood === "mood-tired") changes.push(t("change.tired"));
+  if (entry.mood === "mood-flat") changes.push(t("change.flat"));
   const traceDescriptions = {
-    homeMilestone: "小屋有了新的房间",
-    travel: "小船带回了一面旅行小旗",
-    exercise: "步道向前延伸了",
-    camping: "岛上搭起了一顶帐篷",
-    family: "小屋的灯更暖了",
-    social: "篝火留下了相聚的温度",
-    learning: "书页多了一点痕迹",
-    work: "远处的船多了一点动静",
-    food: "小屋多了一点烟火气",
-    running: "草地上绕出了一圈跑步线",
-    cycling: "岛边多了一个自行车架",
-    postcard: "远方寄来了一张明信片",
-    tent: "远方和脚步搭起了一顶帐篷",
-    picnic: "草地上摆开了一张野餐桌",
-    drink: "篝火旁多了一杯饮料",
+    homeMilestone: "change.homeMilestone",
+    travel: "change.travel",
+    exercise: "change.exercise",
+    camping: "change.camping",
+    family: "change.family",
+    social: "change.social",
+    learning: "change.learning",
+    work: "change.work",
+    food: "change.food",
+    running: "change.running",
+    cycling: "change.cycling",
+    postcard: "change.postcard",
+    tent: "change.tent",
+    picnic: "change.picnic",
+    drink: "change.drink",
   };
-  if (primaryTrace) changes.push(traceDescriptions[primaryTrace]);
-  return changes.slice(0, 2).join("，") || "海面有了一点新的变化";
+  if (primaryTrace && traceDescriptions[primaryTrace]) changes.push(t(traceDescriptions[primaryTrace]));
+  return changes.slice(0, 2).join(i18n?.getLanguage?.() === "en" ? ", " : "，") || t("change.fallback");
 }
 
 function ambientSceneLine(entry) {
-  if (!entry) return "海面还在轻轻动着。";
-  if (entry.stormWeather) return "狂风经过海面，灯塔替小岛守着光。";
-  if (entry.heatWeather || entry.mood === "mood-irritable") return "阳光落在海面上，亮得有些热。";
-  if (entry.mood === "mood-sad") return "小雨落下来，海面慢慢起了纹。";
-  if (entry.mood === "mood-anxious" || entry.mood === "mood-angry" || entry.windy) return "风从海面经过，树影也跟着动了。";
-  if (entry.mood === "mood-bright") return "海面闪着光，远处的云慢慢往右飘。";
-  if (entry.mood === "mood-tired") return "风慢了下来，海面陪你歇一会儿。";
-  return "海面还在轻轻动着。";
+  if (!entry) return t("ambient.waiting");
+  if (entry.stormWeather) return t("ambient.storm");
+  if (entry.heatWeather || entry.mood === "mood-irritable") return t("ambient.hot");
+  if (entry.mood === "mood-sad") return t("ambient.rain");
+  if (entry.mood === "mood-anxious" || entry.mood === "mood-angry" || entry.windy) return t("ambient.wind");
+  if (entry.mood === "mood-bright") return t("ambient.bright");
+  if (entry.mood === "mood-tired") return t("ambient.tired");
+  return t("ambient.waiting");
 }
 
 function weatherAwareEntryLine(entry) {
-  if (entry?.stormWeather) return "狂风暴雨经过海面，灯塔替小岛守着光。";
-  if (entry?.heatWeather) return "今天的阳光有点强，小岛替你挡一会儿。";
-  return entry?.line || "海面恢复平静了。";
+  if (entry?.stormWeather) return t("weatherLine.storm");
+  if (entry?.heatWeather) return t("weatherLine.hot");
+  return translate(entry?.line || t("weatherLine.calm"));
 }
 
 function feedbackEventList(entry) {
@@ -588,12 +603,12 @@ function feedbackEventList(entry) {
 }
 
 function feedbackSummary(entry) {
-  const emotion = displayEmotionLabel(entry);
+  const emotion = displayEmotionText(entry);
   const events = feedbackEventList(entry)
-    .map((event) => event.shortLabel || event.fullLabel)
+    .map((event) => translate(event.shortLabel || event.fullLabel))
     .filter(Boolean)
     .slice(0, 2);
-  return `我听见了：${[emotion, ...events].join(" · ")}`;
+  return t("feedback.prefix", { items: [emotion, ...events].join(" · ") });
 }
 
 function renderFeedbackOptions(entry) {
@@ -604,19 +619,19 @@ function renderFeedbackOptions(entry) {
     .map(
       (option) => `
         <button class="feedback-chip ${option.value === currentEmotion ? "is-current" : ""}" type="button" data-feedback-emotion="${escapeHtml(option.value)}">
-          ${escapeHtml(option.value)}
+          ${escapeHtml(translate(option.value))}
         </button>`,
     )
     .join("");
   const eventButtons = events.length
     ? `
       <div class="feedback-option-row">
-        <span>痕迹</span>
+        <span>${escapeHtml(t("feedback.traces"))}</span>
         ${events
           .map(
             (event) => `
               <button class="feedback-chip feedback-chip-remove" type="button" data-feedback-remove-event="${escapeHtml(event.key)}">
-                去掉${escapeHtml(event.shortLabel || event.fullLabel || "这件事")}
+                ${escapeHtml(t("feedback.remove", { item: translate(event.shortLabel || event.fullLabel || t("event.newLife")) }))}
               </button>`,
           )
           .join("")}
@@ -624,7 +639,7 @@ function renderFeedbackOptions(entry) {
     : "";
   elements.islandFeedbackOptions.innerHTML = `
     <div class="feedback-option-row">
-      <span>情绪</span>
+      <span>${escapeHtml(t("feedback.emotion"))}</span>
       ${emotionButtons}
     </div>
     ${eventButtons}`;
@@ -641,7 +656,7 @@ function showInterpretationFeedback(entry, { openOptions = false } = {}) {
   elements.islandFeedbackSummary.textContent = feedbackSummary(entry);
   renderFeedbackOptions(entry);
   elements.islandFeedbackOptions.hidden = !openOptions;
-  elements.islandFeedbackEdit.textContent = openOptions ? "收起" : "改一下";
+  elements.islandFeedbackEdit.textContent = openOptions ? t("feedback.collapse") : t("feedback.edit");
 }
 
 function hideInterpretationFeedback() {
@@ -683,7 +698,7 @@ function updateEntryFromFeedback(entryId, update) {
   renderHistory();
   renderMonthTraces(nextEntries);
   hideInterpretationFeedback();
-  showToast("已经按你的意思改好了。");
+  showToast(t("toast.edited"));
 }
 
 function handleFeedbackEmotion(optionValue) {
@@ -739,8 +754,8 @@ function newlyAddedEvent(entry, previousEntries, nextEntries) {
   if (!event) return null;
   return {
     key: event.key,
-    title: event.fullLabel || event.shortLabel || "新的生活",
-    detail: event.detail || "岛上留下了一点新的生活痕迹",
+    title: event.fullLabel || event.shortLabel || t("event.newLife"),
+    detail: event.detail || t("event.newTrace"),
   };
 }
 
@@ -751,8 +766,8 @@ function showEventNote(note) {
     elements.islandEventNote.hidden = true;
     return;
   }
-  elements.islandEventNoteTitle.textContent = note.title;
-  elements.islandEventNoteDetail.textContent = note.detail;
+  elements.islandEventNoteTitle.textContent = translate(note.title);
+  elements.islandEventNoteDetail.textContent = translate(note.detail);
   elements.islandEventNote.hidden = false;
   showEventNote.timer = window.setTimeout(() => {
     elements.islandEventNote.hidden = true;
@@ -842,7 +857,7 @@ function setIslandView(isFull) {
   elements.stage.classList.toggle("is-full", isFull);
   elements.body.classList.toggle("is-island-view", isFull);
   elements.toggleView.setAttribute("aria-pressed", String(isFull));
-  const label = isFull ? "看海岸" : "回到小屋";
+  const label = isFull ? t("view.coast") : t("view.home");
   elements.toggleView.setAttribute("aria-label", label);
   elements.toggleViewLabel.textContent = label;
   if (isFull) {
@@ -907,8 +922,8 @@ function chronologicalMonthEntries(entries, monthKey) {
 }
 
 function islandTraceLabel(entry) {
-  if (entry?.stormWeather) return "风雨天气";
-  if (entry?.heatWeather) return "阳光有点强";
+  if (entry?.stormWeather) return translate("风雨天气");
+  if (entry?.heatWeather) return translate("阳光有点强");
   const labels = {
     homeMilestone: "小屋变化",
     travel: "旅行记忆",
@@ -919,7 +934,7 @@ function islandTraceLabel(entry) {
     food: "厨房烟火",
     work: "工作日常",
   };
-  return dailyTraceSummary(entry) || labels[resolvePrimaryTrace(entry)] || "天气变化";
+  return translate(dailyTraceSummary(entry) || labels[resolvePrimaryTrace(entry)] || "天气变化");
 }
 
 function syncMonthPlayButton(totalDays) {
@@ -928,8 +943,9 @@ function syncMonthPlayButton(totalDays) {
   const isPlaying = Boolean(monthPlayTimer);
   elements.monthPlay.disabled = !canPlay;
   elements.monthPlay.classList.toggle("is-playing", isPlaying);
-  elements.monthPlay.setAttribute("aria-label", isPlaying ? "暂停播放本月变化" : "播放本月变化");
-  elements.monthPlay.title = isPlaying ? "暂停播放本月变化" : "播放本月变化";
+  const label = isPlaying ? t("month.pause") : t("month.play");
+  elements.monthPlay.setAttribute("aria-label", label);
+  elements.monthPlay.title = label;
 }
 
 function stopMonthPlayback() {
@@ -976,20 +992,20 @@ function renderIslandDay(entry, currentIndex, totalDays) {
   if (!elements.monthProgressRange) return;
 
   if (!entry || !totalDays) {
-    elements.monthProgressLabel.textContent = "还没有记录";
+    elements.monthProgressLabel.textContent = t("islandDay.empty");
     elements.monthProgressRange.min = "0";
     elements.monthProgressRange.max = "0";
     elements.monthProgressRange.value = "0";
     elements.monthProgressRange.disabled = true;
     elements.monthDayDate.textContent = "";
-    elements.monthDayText.textContent = "今天说一点生活，岛上就会留下第一道痕迹。";
+    elements.monthDayText.textContent = t("islandDay.prompt");
     elements.monthDayTrace.textContent = "";
     syncMonthPlayButton(0);
     return;
   }
 
   const date = dateFromKey(entry.date);
-  elements.monthProgressLabel.textContent = `第 ${currentIndex} 天`;
+  elements.monthProgressLabel.textContent = t("islandDay.day", { index: currentIndex });
   elements.monthProgressRange.min = "1";
   elements.monthProgressRange.max = String(totalDays);
   elements.monthProgressRange.value = String(currentIndex);
@@ -997,10 +1013,16 @@ function renderIslandDay(entry, currentIndex, totalDays) {
   elements.monthProgressRange.setAttribute("aria-valuemin", "1");
   elements.monthProgressRange.setAttribute("aria-valuemax", String(totalDays));
   elements.monthProgressRange.setAttribute("aria-valuenow", String(currentIndex));
-  elements.monthProgressRange.setAttribute("aria-valuetext", `第 ${currentIndex} 天，${entry.rawText || "当天记录"}`);
-  elements.monthDayDate.textContent = `${date.getMonth() + 1}月${date.getDate()}日`;
-  elements.monthDayText.textContent = entry.rawText || "这一天，小岛留下了一点生活。";
-  elements.monthDayTrace.textContent = `主要痕迹：${islandTraceLabel(entry)}`;
+  elements.monthProgressRange.setAttribute(
+    "aria-valuetext",
+    `${t("islandDay.day", { index: currentIndex })}, ${entry.rawText || t("islandDay.record")}`,
+  );
+  elements.monthDayDate.textContent = new Intl.DateTimeFormat(currentLocale(), {
+    month: "short",
+    day: "numeric",
+  }).format(date);
+  elements.monthDayText.textContent = entry.rawText || t("islandDay.prompt");
+  elements.monthDayTrace.textContent = `${i18n?.getLanguage?.() === "en" ? "Main trace: " : "主要痕迹："}${islandTraceLabel(entry)}`;
   syncMonthPlayButton(totalDays);
 }
 
@@ -1022,17 +1044,17 @@ function renderMonthTraces(entries = loadEntries(), cutoffDate = "") {
   if (!lifePaletteRenderer) lifePaletteRenderer = globalThis.EmotionIslandLifePalette.createLifePalette(elements.lifePalette);
   lifePaletteRenderer.render(paletteItems);
   elements.monthTraceOverview.textContent = recordedDays
-    ? `这 ${recordedDays} 天，岛上慢慢有了这些动静。`
-    : "岛还在等第一段生活。";
-  elements.monthTraceEmpty.textContent = recordedDays ? "" : "今天说一点生活，岛上就会留下第一道痕迹。";
+    ? t("month.summary.overview", { days: recordedDays })
+    : t("month.summary.emptyOverview");
+  elements.monthTraceEmpty.textContent = recordedDays ? "" : t("islandDay.prompt");
 }
 
 function memoryDayTitle(dateKey) {
   const today = todayKey();
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-  if (dateKey === today) return "今天";
-  if (dateKey === todayKey(yesterday)) return "昨天";
+  if (dateKey === today) return t("date.today");
+  if (dateKey === todayKey(yesterday)) return t("date.yesterday");
   return formatDay(dateKey);
 }
 
@@ -1062,28 +1084,28 @@ function memoryKind(entry) {
 
 function memoryShortLabel(entry) {
   if (!entry) return "";
-  if (entry.stormWeather) return "风雨";
-  if (entry.homeMilestone) return "新家";
-  if (entry.camping) return "露营";
-  if (entry.travel) return entry.travelPlace || "远行";
-  if (entry.careerSearch) return "找方向";
-  if (entry.careerChange) return "新阶段";
-  if (entry.family) return "家人";
-  if (entry.exercise) return "运动";
-  if (entry.social) return "相聚";
-  if (entry.learning) return "学习";
-  if (entry.food) return "烟火";
-  if (entry.work) return "工作";
-  if (entry.drink) return "小饮";
-  if (entry.mood === "mood-bright") return "晴朗";
-  if (entry.mood === "mood-sad") return "小雨";
-  if (entry.mood === "mood-anxious") return "风起";
-  if (entry.mood === "mood-angry") return "浪高";
-  if (entry.mood === "mood-irritable" || entry.heatWeather) return "强光";
-  if (entry.mood === "mood-unwell") return "薄雾";
-  if (entry.mood === "mood-tired") return "歇一会";
-  if (entry.mood === "mood-flat") return "安静";
-  return "平静";
+  if (entry.stormWeather) return translate("风雨");
+  if (entry.homeMilestone) return translate("新家");
+  if (entry.camping) return translate("露营");
+  if (entry.travel) return entry.travelPlace || translate("远行");
+  if (entry.careerSearch) return i18n?.getLanguage?.() === "en" ? "Finding direction" : "找方向";
+  if (entry.careerChange) return i18n?.getLanguage?.() === "en" ? "New stage" : "新阶段";
+  if (entry.family) return translate("家人");
+  if (entry.exercise) return translate("运动");
+  if (entry.social) return translate("相聚");
+  if (entry.learning) return i18n?.getLanguage?.() === "en" ? "Learning" : "学习";
+  if (entry.food) return translate("烟火");
+  if (entry.work) return translate("工作");
+  if (entry.drink) return i18n?.getLanguage?.() === "en" ? "A small drink" : "小饮";
+  if (entry.mood === "mood-bright") return i18n?.getLanguage?.() === "en" ? "Clear" : "晴朗";
+  if (entry.mood === "mood-sad") return i18n?.getLanguage?.() === "en" ? "Light rain" : "小雨";
+  if (entry.mood === "mood-anxious") return i18n?.getLanguage?.() === "en" ? "Wind rising" : "风起";
+  if (entry.mood === "mood-angry") return i18n?.getLanguage?.() === "en" ? "Higher waves" : "浪高";
+  if (entry.mood === "mood-irritable" || entry.heatWeather) return i18n?.getLanguage?.() === "en" ? "Strong light" : "强光";
+  if (entry.mood === "mood-unwell") return i18n?.getLanguage?.() === "en" ? "Thin mist" : "薄雾";
+  if (entry.mood === "mood-tired") return i18n?.getLanguage?.() === "en" ? "Rest a while" : "歇一会";
+  if (entry.mood === "mood-flat") return i18n?.getLanguage?.() === "en" ? "Quiet" : "安静";
+  return translate("平静");
 }
 
 function memoryGlyphMarkup(kind, index) {
@@ -1170,7 +1192,7 @@ function memoryGlyphMarkup(kind, index) {
 
 function renderMemoryDetail(entry, dateKey) {
   const date = dateFromKey(dateKey);
-  const dateLabel = new Intl.DateTimeFormat("zh-CN", {
+  const dateLabel = new Intl.DateTimeFormat(currentLocale(), {
     month: "long",
     day: "numeric",
     weekday: "long",
@@ -1180,15 +1202,15 @@ function renderMemoryDetail(entry, dateKey) {
     elements.memoryDetail.classList.add("is-empty");
     elements.memoryDetail.innerHTML = `
       <p class="memory-detail-meta"><time datetime="${dateKey}">${escapeHtml(dateLabel)}</time></p>
-      <p class="memory-detail-line">这一天，小岛没有留下新的痕迹。</p>`;
+      <p class="memory-detail-line">${escapeHtml(t("history.noTrace"))}</p>`;
     return;
   }
 
   const memoryLabel = entry.stormWeather
-    ? "风雨天气"
+    ? translate("风雨天气")
     : entry.heatWeather
-      ? "阳光有点强"
-      : entry.label || entry.emotion || "有了新变化";
+      ? translate("阳光有点强")
+      : translate(entry.label || entry.emotion || t("history.newChange"));
   const memoryLine = weatherAwareEntryLine(entry);
 
   elements.memoryDetail.classList.remove("is-empty");
@@ -1218,14 +1240,17 @@ function renderDays() {
       const isSelected = dateKey === selectedMemoryDate;
       const date = dateFromKey(dateKey);
       const entryCount = entry?.dayEntryCount || 1;
-      const entryCountLabel = entryCount > 1 ? `，今天记录了${entryCount}段` : "";
+      const entryCountLabel = entryCount > 1
+        ? `${i18n?.getLanguage?.() === "en" ? ", " : "，"}${t("memory.entryCount", { count: entryCount })}`
+        : "";
+      const daySeparator = i18n?.getLanguage?.() === "en" ? ", " : "，";
       return `
         <button
           class="memory-day ${entry ? "has-memory" : "is-empty"} ${isSelected ? "is-selected" : ""} ${dateKey === todayKey() ? "is-today" : ""}"
           type="button"
           data-memory-date="${dateKey}"
           aria-pressed="${String(isSelected)}"
-          aria-label="${escapeHtml(`${memoryDayTitle(dateKey)}${entry ? `，${memoryShortLabel(entry)}${entryCountLabel}` : "，没有记录"}`)}"
+          aria-label="${escapeHtml(`${memoryDayTitle(dateKey)}${entry ? `${daySeparator}${memoryShortLabel(entry)}${entryCountLabel}` : `${daySeparator}${t("memory.noRecord")}`}`)}"
           ${entry ? "" : "disabled"}
         >
           <span class="memory-day-heading">
@@ -1234,7 +1259,7 @@ function renderDays() {
           </span>
           <span class="memory-day-marker">${memoryGlyphMarkup(memoryKind(entry), index)}</span>
           <span class="memory-day-label">${escapeHtml(memoryShortLabel(entry))}</span>
-          ${entryCount > 1 ? `<span class="memory-day-count">${entryCount}段</span>` : ""}
+          ${entryCount > 1 ? `<span class="memory-day-count">${escapeHtml(t("count.entries", { count: entryCount }))}</span>` : ""}
         </button>`;
     })
     .join("");
@@ -1295,36 +1320,45 @@ function renderMonth(entries = loadEntries(), monthKey = todayKey().slice(0, 7),
   activeMonthEntries = entries;
   const weather = buildMonthlyWeather(entries, monthKey);
   const [year, month] = monthKey.split("-").map(Number);
-  const monthLabel = new Intl.DateTimeFormat("zh-CN", {
+  const monthLabel = new Intl.DateTimeFormat(currentLocale(), {
     year: "numeric",
     month: "long",
   }).format(new Date(year, month - 1, 1));
 
   elements.monthDialogKicker.textContent = monthLabel;
   if (!weather.recordedDays) {
-    elements.monthSummary.textContent = "这个月的天空，还在等第一段生活。";
+    elements.monthSummary.textContent = t("month.summary.empty");
   } else {
-    const clearingCopy = weather.clearing ? `其中 ${weather.clearing} 天，后来慢慢转晴。` : "";
-    const weatherCopy =
-      `这个月有 ${weather.counts.bright} 天放晴，${weather.counts.calm} 天平静，` +
-      `${weather.counts.low} 天低云，${weather.counts.wind} 天风起，${weather.counts.storm} 天雨浪。${clearingCopy}`;
+    const clearingCopy = weather.clearing
+      ? t("month.clearing", {
+        days: isEnglish() ? `${weather.clearing} ${weather.clearing === 1 ? "day" : "days"}` : `${weather.clearing}天`,
+      })
+      : "";
+    const weatherCopy = t("month.weatherSummary", {
+      bright: weatherCountLabel(weather.counts.bright, "天放晴", "clear day"),
+      calm: weatherCountLabel(weather.counts.calm, "天平静", "calm day"),
+      low: weatherCountLabel(weather.counts.low, "天低云", "low-cloud day"),
+      wind: weatherCountLabel(weather.counts.wind, "天风起", "windy day"),
+      storm: weatherCountLabel(weather.counts.storm, "天雨浪", "stormy day"),
+      clearing: clearingCopy,
+    });
     const workCopy = weather.busyWork ? ` ${busyWorkMonthCopy(weather.workDays)}` : "";
     elements.monthSummary.textContent = `${weatherCopy}${workCopy}`;
   }
 
   const lighterDetails = [
-    weather.counts.bright ? `${weather.counts.bright} 天放晴` : "",
-    weather.counts.calm ? `${weather.counts.calm} 天平静` : "",
-  ].filter(Boolean).join(" · ") || "还没有记录";
+    weather.counts.bright ? weatherCountLabel(weather.counts.bright, "天放晴", "clear day") : "",
+    weather.counts.calm ? weatherCountLabel(weather.counts.calm, "天平静", "calm day") : "",
+  ].filter(Boolean).join(" · ") || t("month.noRecords");
   const heavierDetails = [
-    weather.counts.low ? `${weather.counts.low} 天低云` : "",
-    weather.counts.wind ? `${weather.counts.wind} 天风起` : "",
-    weather.counts.storm ? `${weather.counts.storm} 天雨浪` : "",
-  ].filter(Boolean).join(" · ") || "还没有记录";
+    weather.counts.low ? weatherCountLabel(weather.counts.low, "天低云", "low-cloud day") : "",
+    weather.counts.wind ? weatherCountLabel(weather.counts.wind, "天风起", "windy day") : "",
+    weather.counts.storm ? weatherCountLabel(weather.counts.storm, "天雨浪", "stormy day") : "",
+  ].filter(Boolean).join(" · ") || t("month.noRecords");
 
   elements.monthBalance.innerHTML = `
-    <p><span>心里比较轻松</span><strong>${weather.positiveDays} 天</strong><small>${lighterDetails}</small></p>
-    <p><span>心里有点辛苦</span><strong>${weather.difficultDays} 天</strong><small>${heavierDetails}</small></p>`;
+    <p><span>${escapeHtml(t("month.balance.light"))}</span><strong>${escapeHtml(dayCountLabel(weather.positiveDays))}</strong><small>${escapeHtml(lighterDetails)}</small></p>
+    <p><span>${escapeHtml(t("month.balance.difficult"))}</span><strong>${escapeHtml(dayCountLabel(weather.difficultDays))}</strong><small>${escapeHtml(heavierDetails)}</small></p>`;
 
   const today = todayKey();
   elements.monthCalendar.innerHTML = currentMonthKeys(monthKey)
@@ -1334,8 +1368,8 @@ function renderMonth(entries = loadEntries(), monthKey = todayKey().slice(0, 7),
       const isFuture = !options.allowFuture && dateKey > today;
       const dayNumber = Number(dateKey.slice(-2));
       const label = entry
-        ? `${dayNumber}日，${memoryShortLabel(entry)}`
-        : `${dayNumber}日，没有记录`;
+        ? t("memory.monthEntry", { day: dayNumber, label: memoryShortLabel(entry) })
+        : t("memory.monthNoEntry", { day: dayNumber });
       return `
         <button
           class="month-day month-weather-${category} ${entry ? "has-memory" : "is-empty"} ${entry?.recovery ? "is-clearing" : ""} ${isFuture ? "is-future" : ""}"
@@ -1361,13 +1395,16 @@ function selectMonthDay(dateKey) {
   setIslandView(false);
   animateIslandUpdate(entry);
   elements.stage.scrollIntoView({ behavior: "smooth", block: "start" });
-  showToast(`${dateKey.slice(5).replace("-", "月")}日，回到那天的小岛。`);
+  const [, month, day] = dateKey.split("-");
+  showToast(t("toast.monthDay", {
+    date: i18n?.getLanguage?.() === "en" ? new Intl.DateTimeFormat(currentLocale(), { month: "short", day: "numeric" }).format(dateFromKey(dateKey)) : `${Number(month)}月${Number(day)}`,
+  }));
 }
 
 function renderHistory() {
   const entries = loadEntries();
   if (!entries.length) {
-    elements.historyContent.innerHTML = '<p class="history-empty">还没有记录。今天聊一分钟，小岛就会留下第一道痕迹。</p>';
+    elements.historyContent.innerHTML = `<p class="history-empty">${escapeHtml(t("history.empty"))}</p>`;
     return;
   }
 
@@ -1376,7 +1413,7 @@ function renderHistory() {
       (entry) => `
         <article class="history-item">
           <time datetime="${entry.createdAt}">${formatFullDate(entry.createdAt)}</time>
-          <strong>${escapeHtml(entry.line)}</strong>
+          <strong>${escapeHtml(translate(entry.line))}</strong>
           <p class="history-item-raw">${escapeHtml(entry.rawText)}</p>
         </article>
       `,
@@ -1385,13 +1422,13 @@ function renderHistory() {
 }
 
 function formatDay(value) {
-  const formatter = new Intl.DateTimeFormat("zh-CN", { weekday: "short" });
+  const formatter = new Intl.DateTimeFormat(currentLocale(), { weekday: "short" });
   const date = /^\d{4}-\d{2}-\d{2}$/.test(value) ? dateFromKey(value) : new Date(value);
   return formatter.format(date);
 }
 
 function formatFullDate(value) {
-  const formatter = new Intl.DateTimeFormat("zh-CN", {
+  const formatter = new Intl.DateTimeFormat(currentLocale(), {
     month: "long",
     day: "numeric",
     weekday: "long",
@@ -1420,17 +1457,20 @@ function showToast(message) {
 }
 
 function showTravelDetails() {
-  const place = elements.travelMarker.dataset.place || "远方";
+  const place = translate(elements.travelMarker.dataset.place || t("travel.faraway"));
   const date = elements.travelMarker.dataset.date
     ? formatFullDate(elements.travelMarker.dataset.date)
     : "";
-  showToast(`${date ? `${date}，` : ""}小船从${place}带回了这面小旗。`);
+  showToast(t("toast.travel", {
+    prefix: date ? `${date}${i18n?.getLanguage?.() === "en" ? ", " : "，"}` : "",
+    place,
+  }));
 }
 
 function submitToday() {
   const text = elements.input.value.trim();
   if (!text) {
-    showToast("先说一点今天发生的事。");
+    showToast(t("toast.emptyInput"));
     elements.input.focus();
     return;
   }
@@ -1439,7 +1479,7 @@ function submitToday() {
   const analyzedEntry = analyzeText(text);
   const result = upsertToday(analyzedEntry);
   if (result.limitReached) {
-    showToast(dailyEntryLimitMessage);
+    showToast(t("toast.dailyLimit"));
     return;
   }
   const { entry, rawEntry, entries: nextEntries } = result;
@@ -1462,7 +1502,7 @@ function submitToday() {
     block: "start",
     inline: "nearest",
   });
-  showToast(`今天的小岛更新了：${describeIslandUpdate(entry)}。`);
+  showToast(t("toast.updated", { changes: describeIslandUpdate(entry) }));
 }
 
 function setupSpeech() {
@@ -1473,7 +1513,7 @@ function setupSpeech() {
   }
 
   recognition = new SpeechRecognition();
-  recognition.lang = "zh-CN";
+  recognition.lang = i18n?.getLanguage?.() === "en" ? "en-US" : "zh-CN";
   recognition.interimResults = true;
   recognition.continuous = true;
 
@@ -1500,8 +1540,8 @@ function setupSpeech() {
     listening = false;
     setVoiceState("error");
     const message = event.error === "not-allowed"
-      ? "麦克风权限未开启，请直接使用文字输入。"
-      : "语音输入暂时不可用，请直接使用文字输入。";
+      ? t("toast.speechPermission")
+      : t("toast.speechUnavailable");
     showToast(message);
   });
 }
@@ -1509,7 +1549,7 @@ function setupSpeech() {
 function toggleSpeech() {
   if (!recognition) {
     setVoiceState("unsupported");
-    showToast("当前预览暂不支持语音输入，请直接写下今天。");
+    showToast(t("toast.previewSpeech"));
     return;
   }
 
@@ -1521,7 +1561,7 @@ function toggleSpeech() {
     } catch {
       listening = false;
       setVoiceState("error");
-      showToast("语音输入暂时不可用，请直接使用文字输入。");
+      showToast(t("toast.speechUnavailable"));
     }
   }
 }
@@ -1539,7 +1579,7 @@ function resetDemoData() {
   renderHistory();
   renderMonthTraces([]);
   if (elements.memoryMenu) elements.memoryMenu.open = false;
-  showToast("演示数据已清空。");
+  showToast(t("toast.demoCleared"));
 }
 
 function clearToday() {
@@ -1556,7 +1596,7 @@ function clearToday() {
   renderHistory();
   renderMonthTraces(entries);
   if (elements.memoryMenu) elements.memoryMenu.open = false;
-  showToast("今天的记录已清空。");
+  showToast(t("toast.todayCleared"));
 }
 
 function handleMemoryMenuAction(event) {
@@ -1568,6 +1608,31 @@ function handleMemoryMenuAction(event) {
   event.stopPropagation();
   if (button.id === "clear-today") clearToday();
   else resetDemoData();
+}
+
+function refreshLanguage() {
+  i18n?.applyStatic?.(document);
+  if (recognition) recognition.lang = i18n?.getLanguage?.() === "en" ? "en-US" : "zh-CN";
+  setVoiceState(listening ? "listening" : elements.input.value.trim() ? "recognized" : recognition ? "idle" : "unsupported");
+
+  const entries = loadEntries();
+  const selectedEntry = visibleEntries(entries).find((entry) => entry.date === selectedMemoryDate);
+  if (selectedEntry) applyEntry(selectedEntry, { entries, cutoffDate: selectedMemoryDate });
+  else applyWaitingForTodayState(entries);
+  renderDays();
+  renderHistory();
+  renderMonthTraces(entries, selectedEntry?.date || "");
+  if (elements.monthDialog?.open) {
+    renderMonth(activeMonthEntries.length ? activeMonthEntries : entries, inferMonthKey(activeMonthEntries.length ? activeMonthEntries : entries));
+  }
+  if (elements.islandFeedback && !elements.islandFeedback.hidden) {
+    const feedbackEntry = entries.find((entry) => entry.id === elements.islandFeedback.dataset.entryId);
+    if (feedbackEntry) {
+      showInterpretationFeedback(feedbackEntry, {
+        openOptions: !elements.islandFeedbackOptions.hidden,
+      });
+    }
+  }
 }
 
 function init() {
@@ -1586,6 +1651,8 @@ function init() {
   renderMonthTraces(storedEntries);
 
   elements.submit.addEventListener("click", submitToday);
+  elements.languageToggle?.addEventListener("click", () => i18n?.toggle?.());
+  document.addEventListener("emotion-island-language-change", refreshLanguage);
   elements.mic.addEventListener("click", toggleSpeech);
   elements.input.addEventListener("input", resizeTextInput);
   elements.clearToday?.addEventListener("click", (event) => {
@@ -1602,7 +1669,7 @@ function init() {
   elements.islandFeedbackEdit?.addEventListener("click", () => {
     const isOpen = !elements.islandFeedbackOptions.hidden;
     elements.islandFeedbackOptions.hidden = isOpen;
-    elements.islandFeedbackEdit.textContent = isOpen ? "改一下" : "收起";
+    elements.islandFeedbackEdit.textContent = isOpen ? t("feedback.edit") : t("feedback.collapse");
   });
   elements.islandFeedbackOptions?.addEventListener("click", (event) => {
     const emotionButton = event.target.closest("[data-feedback-emotion]");
@@ -1678,7 +1745,7 @@ globalThis.EmotionIslandApp = {
     const islandState = buildIslandState(entries, cutoffDate);
     const entry = islandState.latestEntry || {
       mood: "mood-calm",
-      line: "今天的小岛，正在等你带回一点生活。",
+      line: t("waiting.today"),
     };
     applyEntry(entry, { entries, cutoffDate });
     renderMonthTraces(entries, cutoffDate);

@@ -32,6 +32,14 @@
       .replaceAll("'", "&#039;");
   }
 
+  function localize(value) {
+    return global.EmotionIslandI18n?.translate(value) ?? value;
+  }
+
+  function localizedCount(count) {
+    return global.EmotionIslandI18n?.t(count === 1 ? "count.day" : "count.days", { count }) || `${count}天`;
+  }
+
   function rgba(hex, alpha) {
     const value = hex.replace("#", "");
     const normalized = value.length === 3 ? value.split("").map((char) => char + char).join("") : value;
@@ -444,7 +452,7 @@
       laidOut.forEach((item) => {
         const button = labelLayer.querySelector(`[data-life-key="${CSS.escape(item.key)}"]`);
         if (!button) return;
-        const labelLength = [...item.shortLabel].length;
+        const labelLength = [...String(localize(item.shortLabel))].length;
         const labelWidth = Math.max(item.radius * 0.84 * item.stretchX, labelLength > 3 ? 78 : labelLength > 2 ? 64 : 48);
         const labelHeight = Math.max(item.radius * 0.64 * item.stretchY, 36);
         button.style.left = `${((item.coreX ?? item.x) / width) * 100}%`;
@@ -457,12 +465,12 @@
     function showDetail(item) {
       if (!item) {
         detail.classList.remove("has-selection");
-        detail.innerHTML = "<span>点击一个色块，看看它留下了什么。</span>";
+        detail.innerHTML = `<span>${escapeHtml(global.EmotionIslandI18n?.t("palette.detail") || "点击一个色块，看看它留下了什么。")}</span>`;
         return;
       }
       detail.classList.add("has-selection");
-      const sourceSummary = item.sourceSummary ? `<small>${escapeHtml(item.sourceSummary)}</small>` : "";
-      detail.innerHTML = `<strong>${escapeHtml(item.fullLabel)} · ${item.count}</strong><p>${escapeHtml(item.detail)}</p>${sourceSummary}`;
+      const sourceSummary = item.sourceSummary ? `<small>${escapeHtml(localize(item.sourceSummary))}</small>` : "";
+      detail.innerHTML = `<strong>${escapeHtml(localize(item.fullLabel))} · ${escapeHtml(localizedCount(item.count))}</strong><p>${escapeHtml(localize(item.detail))}</p>${sourceSummary}`;
     }
 
     function select(key) {
@@ -513,9 +521,9 @@
               type="button"
               data-life-key="${escapeHtml(item.key)}"
               aria-pressed="false"
-              aria-label="${escapeHtml(`${item.fullLabel}，${item.count}天`)}"
+              aria-label="${escapeHtml(`${localize(item.fullLabel)}，${localizedCount(item.count)}`)}"
               style="--life-label-color:#111814;"
-            >${escapeHtml(item.shortLabel)}</button>`,
+            >${escapeHtml(localize(item.shortLabel))}</button>`,
         )
         .join("");
       labelLayer.querySelectorAll(".life-palette-label").forEach((button) => {
@@ -526,6 +534,16 @@
     }
 
     window.addEventListener("resize", draw, { passive: true });
+    window.addEventListener("emotion-island-language-change", () => {
+      labelLayer.querySelectorAll(".life-palette-label").forEach((button) => {
+        const item = items.find((candidate) => candidate.key === button.dataset.lifeKey);
+        if (!item) return;
+        button.textContent = localize(item.shortLabel);
+        button.setAttribute("aria-label", `${localize(item.fullLabel)}，${localizedCount(item.count)}`);
+      });
+      showDetail(items.find((item) => item.key === selectedKey));
+      draw();
+    });
     root.addEventListener("click", (event) => {
       if (event.target.closest(".life-palette-label")) return;
       const item = itemAtPoint(event);
